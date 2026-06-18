@@ -617,6 +617,7 @@
                         <h1>Investimentos</h1>
                         <p class="subtitle">Sua carteira consolidada em um só lugar.</p>
                     </div>
+                    <button class="btn btn-primary" onclick="openInvestmentModal()"><i class="fa-solid fa-plus"></i> Adicionar Ativo</button>
                     <button class="btn btn-outline"><i class="fa-solid fa-arrow-up-right-from-square"></i> Exportar carteira</button>
                 </div>
 
@@ -1055,8 +1056,8 @@
         </div>
         <input type="hidden" id="transactionId">
         <div class="type-toggle" id="typeToggle">
-            <label class="checked" onclick="setTransactionType('receita')"><input type="radio" name="tType" id="tTipo" value="receita" checked><span><i class="fa-solid fa-arrow-trend-up"></i> Receita</span></label>
-            <label onclick="setTransactionType('despesa')"><input type="radio" name="tType" id="tTipo" value="despesa"><span><i class="fa-solid fa-arrow-trend-down"></i> Despesa</span></label>
+            <label class="checked" onclick="setTransactionType('receita')"><input type="radio" name="tType" value="receita" checked><span><i class="fa-solid fa-arrow-trend-up"></i> Receita</span></label>
+            <label onclick="setTransactionType('despesa')"><input type="radio" name="tType" value="despesa"><span><i class="fa-solid fa-arrow-trend-down"></i> Despesa</span></label>
         </div>
         <div class="form-group" style="margin-top: 16px;">
             <label>Descrição</label>
@@ -1120,6 +1121,10 @@
             <div class="form-group">
                 <label>Senha</label>
                 <input type="password" class="form-control" id="loginPassword" placeholder="••••••••">
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                <input type="checkbox" id="rememberMe" checked style="accent-color: var(--accent); width: 16px; height: 16px;">
+                <label for="rememberMe" style="font-size: 13px; color: var(--text-sec); cursor: pointer;">Lembrar-me</label>
             </div>
             <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="handleLogin()"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
             <p style="text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-sec);">
@@ -1223,8 +1228,12 @@
     function handleLogin() {
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
+        const remember = document.getElementById('rememberMe').checked;
         if (!email || !password) { alert('Preencha todos os campos.'); return; }
-        auth.signInWithEmailAndPassword(email, password).catch(err => alert(err.message));
+        const persistence = remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+        auth.setPersistence(persistence).then(() => {
+            return auth.signInWithEmailAndPassword(email, password);
+        }).catch(err => alert(err.message));
     }
 
     function handleRegister() {
@@ -1301,7 +1310,7 @@
         return snap.docs.map(d => ({ id: d.id, ...d.data() }));
     }
 
-    async function saveBudget(data) {
+    async function saveBudgetData(data) {
         const ref = getUserRef();
         if (!ref) return;
         if (data.id) { await ref.collection('budgets').doc(data.id).update(data); } else { await ref.collection('budgets').add(data); }
@@ -1314,7 +1323,7 @@
         return snap.docs.map(d => ({ id: d.id, ...d.data() }));
     }
 
-    async function saveGoal(data) {
+    async function saveGoalData(data) {
         const ref = getUserRef();
         if (!ref) return;
         if (data.id) { await ref.collection('goals').doc(data.id).update(data); } else { await ref.collection('goals').add(data); }
@@ -1327,7 +1336,7 @@
         return snap.docs.map(d => ({ id: d.id, ...d.data() }));
     }
 
-    async function saveInvestment(data) {
+    async function saveInvestmentData(data) {
         const ref = getUserRef();
         if (!ref) return;
         if (data.id) { await ref.collection('investments').doc(data.id).update(data); } else { await ref.collection('investments').add(data); }
@@ -1340,7 +1349,7 @@
         return snap.docs.map(d => ({ id: d.id, ...d.data() }));
     }
 
-    async function saveDebt(data) {
+    async function saveDebtData(data) {
         const ref = getUserRef();
         if (!ref) return;
         if (data.id) { await ref.collection('debts').doc(data.id).update(data); } else { await ref.collection('debts').add(data); }
@@ -1896,7 +1905,7 @@
         if (!titulo || !valorAlvo) { alert('Preencha os campos obrigatórios.'); return; }
         const data = { titulo, valorAlvo: parseFloat(valorAlvo), valorAtual: parseFloat(valorAtual) || 0, prazo, icone };
         if (id) data.id = id;
-        await saveGoal(data);
+        await saveGoalData(data);
         closeGoalModal();
         renderedPages['metas'] = false;
         await renderMetas();
@@ -1926,7 +1935,7 @@
         if (!limite) { alert('Defina um limite.'); return; }
         const data = { categoria, limite: parseFloat(limite) };
         if (id) data.id = id;
-        await saveBudget(data);
+        await saveBudgetData(data);
         closeBudgetModal();
         renderedPages['orcamentos'] = false;
         await renderOrcamentos();
@@ -1958,7 +1967,7 @@
         if (!nome || !valor) { alert('Preencha os campos obrigatórios.'); return; }
         const data = { nome, classe, valor: parseFloat(valor) };
         if (id) data.id = id;
-        await saveInvestment(data);
+        await saveInvestmentData(data);
         closeInvestmentModal();
         renderedPages['investimentos'] = false;
         await renderInvestimentos();
@@ -1992,7 +2001,7 @@
         if (!nome || !valorTotal) { alert('Preencha os campos obrigatórios.'); return; }
         const data = { nome, valorTotal: parseFloat(valorTotal), taxaJuros: parseFloat(taxaJuros) || 0, pagamentoMensal: parseFloat(pagamentoMensal) || 0 };
         if (id) data.id = id;
-        await saveDebt(data);
+        await saveDebtData(data);
         closeDebtModal();
         renderedPages['dividas'] = false;
         await renderDividas();
