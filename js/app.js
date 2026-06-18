@@ -198,8 +198,10 @@
     }
 
     async function loadAllData() {
+        const activePage = document.querySelector('.page.active');
+        const activeId = activePage ? activePage.id : 'dashboard';
         for (let k in renderedPages) delete renderedPages[k];
-        renderPage('dashboard');
+        renderPage(activeId);
         calcularJurosCompostos();
         calcularEmprestimo();
     }
@@ -347,13 +349,14 @@
         const currentMonth = now.getMonth();
         const currentYear = now.getFullYear();
 
+        const confirmedTxs = transactions.filter(t => (t.status || 'Confirmado') === 'Confirmado');
         const monthTxs = transactions.filter(t => {
             const d = new Date(t.data + (t.data.includes('T') ? '' : 'T12:00:00'));
             return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
         });
-
-        const totalIncome = monthTxs.filter(t => t.tipo === 'receita').reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
-        const totalExpense = monthTxs.filter(t => t.tipo === 'despesa').reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
+        const monthConfirmed = monthTxs.filter(t => (t.status || 'Confirmado') === 'Confirmado');
+        const totalIncome = monthConfirmed.filter(t => t.tipo === 'receita').reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
+        const totalExpense = monthConfirmed.filter(t => t.tipo === 'despesa').reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
         const balance = totalIncome - totalExpense;
         const savings = totalIncome > 0 ? (balance / totalIncome * 100) : 0;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -393,7 +396,7 @@
         for (let i = 5; i >= 0; i--) {
             const m = new Date(currentYear, currentMonth - i, 1);
             months.push(m.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', ''));
-            const ms = transactions.filter(t => {
+            const ms = confirmedTxs.filter(t => {
                 const d = new Date(t.data + (t.data.includes('T') ? '' : 'T12:00:00'));
                 return d.getMonth() === m.getMonth() && d.getFullYear() === m.getFullYear();
             });
@@ -413,8 +416,8 @@
             options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { grid: { color: 'rgba(148,163,184,0.08)' } }, x: { grid: { display: false } } } }
         });
 
-        const catLabels = [...new Set(monthTxs.filter(t => t.tipo === 'despesa').map(t => t.categoria))];
-        const catData = catLabels.map(c => monthTxs.filter(t => t.tipo === 'despesa' && t.categoria === c).reduce((s, t) => s + (parseFloat(t.valor) || 0), 0));
+        const catLabels = [...new Set(monthConfirmed.filter(t => t.tipo === 'despesa').map(t => t.categoria))];
+        const catData = catLabels.map(c => monthConfirmed.filter(t => t.tipo === 'despesa' && t.categoria === c).reduce((s, t) => s + (parseFloat(t.valor) || 0), 0));
         chartInstances['expenseCategoryChart'] = new Chart(document.getElementById('expenseCategoryChart'), {
             type: 'doughnut',
             data: {
@@ -433,14 +436,15 @@
             const d = new Date(t.data + (t.data.includes('T') ? '' : 'T12:00:00'));
             return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
         });
-        const total = monthTxs.reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
+        const monthConfirmed = monthTxs.filter(t => (t.status || 'Confirmado') === 'Confirmado');
+        const total = monthConfirmed.reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
         const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
         const dailyAvg = total / daysInMonth;
 
         let biggestSource = '-';
         let biggestVal = 0;
         const srcMap = {};
-        monthTxs.forEach(t => {
+        monthConfirmed.forEach(t => {
             const v = parseFloat(t.valor) || 0;
             srcMap[t.categoria] = (srcMap[t.categoria] || 0) + v;
             if (srcMap[t.categoria] > biggestVal) { biggestVal = srcMap[t.categoria]; biggestSource = t.categoria; }
@@ -489,14 +493,15 @@
             const d = new Date(t.data + (t.data.includes('T') ? '' : 'T12:00:00'));
             return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
         });
-        const total = monthTxs.reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
+        const monthConfirmed = monthTxs.filter(t => (t.status || 'Confirmado') === 'Confirmado');
+        const total = monthConfirmed.reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
         const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
         const dailyAvg = total / daysInMonth;
 
         let biggestCat = '-';
         let biggestVal = 0;
         const catMap = {};
-        monthTxs.forEach(t => {
+        monthConfirmed.forEach(t => {
             const v = parseFloat(t.valor) || 0;
             catMap[t.categoria] = (catMap[t.categoria] || 0) + v;
             if (catMap[t.categoria] > biggestVal) { biggestVal = catMap[t.categoria]; biggestCat = t.categoria; }
