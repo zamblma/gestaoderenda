@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus | Gestão Financeira Premium</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-main: #0F172A;
+            --bg-card: #1E293B;
+            --accent: #38BDF8;
+            --success: #22C55E;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --purple: #818CF8;
+            --text-main: #F8FAFC;
+            --text-sec: #94A3B8;
+            --border-color: rgba(148, 163, 184, 0.1);
+            --sidebar-width: 260px;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow: hidden; /* App feel */
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: var(--bg-card); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-sec); }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .logo-area {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-area i { color: var(--accent); font-size: 24px; }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--text-sec);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i { width: 20px; text-align: center; font-size: 16px; }
+        .nav-item:hover { background-color: rgba(56, 189, 248, 0.1); color: var(--accent); }
+        .nav-item.active { background-color: var(--accent); color: #0F172A; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); }
+
+        .sidebar-footer {
+            padding: 16px 24px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+        .sidebar-footer-card {
+            background: linear-gradient(135deg, rgba(56,189,248,0.12), rgba(129,140,248,0.12));
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 12px;
+            color: var(--text-sec);
+        }
+        .sidebar-footer-card strong { color: var(--text-main); display: block; margin-bottom: 4px; font-size: 13px; }
+
+        /* Main Content */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Topbar */
+        .topbar {
+            height: 72px;
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 50;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-sec);
+        }
+
+        .search-bar input {
+            width: 100%;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 16px 10px 44px;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-bar input:focus { border-color: var(--accent); }
+
+        .top-actions { display: flex; align-items: center; gap: 20px; }
+        .notification-btn {
+            background: none; border: none; color: var(--text-sec); font-size: 20px; cursor: pointer; position: relative;
+            transition: color 0.2s;
+        }
+        .notification-btn:hover { color: var(--text-main); }
+        .badge {
+            position: absolute; top: -4px; right: -4px; background-color: var(--error); width: 8px; height: 8px; border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex; align-items: center; gap: 12px; cursor: pointer;
+        }
+        .avatar {
+            width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #818CF8);
+            display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+            position: relative;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography & Utilities */
+        h1 { font-size: 24px; font-weight: 600; margin-bottom: 24px; color: var(--text-main); }
+        h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+        .subtitle { color: var(--text-sec); font-size: 14px; margin-top: -16px; margin-bottom: 24px; }
+
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 24px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 24px; }
+        .grid-60-40 { display: grid; grid-template-columns: 3fr 2fr; gap: 24px; margin-bottom: 24px; }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+
+        .kpi-title { color: var(--text-sec); font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .kpi-value { font-size: 28px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+        .kpi-trend { font-size: 13px; display: flex; align-items: center; gap: 4px; }
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--error); }
+
+        /* Tables */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 16px; font-size: 12px; font-weight: 600; color: var(--text-sec); text-transform: uppercase; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+        td { padding: 16px; font-size: 14px; border-bottom: 1px solid var(--border-color); color: var(--text-main); white-space: nowrap; }
+        tr:last-child td { border-bottom: none; }
+        tr { transition: background-color 0.2s; }
+        tr:hover { background-color: rgba(255,255,255,0.02); }
+
+        .status-badge {
+            padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .status-success { background: rgba(34, 197, 94, 0.1); color: var(--success); }
+        .status-warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .status-error { background: rgba(239, 68, 68, 0.1); color: var(--error); }
+
+        .tag {
+            padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; background: rgba(148,163,184,0.1); color: var(--text-sec); display: inline-block;
+        }
+
+        .action-btn { background: none; border: none; color: var(--text-sec); cursor: pointer; padding: 4px; transition: color 0.2s; font-size: 14px; }
+        .action-btn:hover { color: var(--accent); }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none;
+            transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary { background-color: var(--accent); color: #0F172A; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2); }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-outline { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+        .btn-outline:hover { background-color: var(--bg-card); border-color: var(--text-sec); }
+        .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+
+        /* Progress Bars */
+        .progress-container { width: 100%; background-color: var(--bg-main); border-radius: 10px; height: 8px; overflow: hidden; margin-top: 8px; }
+        .progress-bar { height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: var(--bg-card); width: 480px; border-radius: 16px; padding: 32px; border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: zoomIn 0.3s ease; max-height: 90vh; overflow-y: auto;
+        }
+        @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .modal-header h2 { margin: 0; }
+        .close-modal { background: none; border: none; color: var(--text-sec); font-size: 20px; cursor: pointer; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; color: var(--text-sec); margin-bottom: 8px; }
+        .form-control { width: 100%; background: var(--bg-main); border: 1px solid var(--border-color); color: white; padding: 12px; border-radius: 8px; font-size: 14px; outline: none; transition: 0.2s; }
+        .form-control:focus { border-color: var(--accent); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .type-toggle { display: flex; gap: 8px; }
+        .type-toggle label { flex: 1; text-align: center; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text-sec); transition: 0.2s; }
+        .type-toggle input { display: none; }
+        .type-toggle input:checked + span { color: var(--text-main); }
+        .type-toggle label.checked { border-color: var(--accent); background: rgba(56,189,248,0.08); color: var(--accent); }
+
+        /* Responsiveness */
+        @media (max-width: 1024px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-60-40 { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); position: fixed; height: 100vh; }
+            .sidebar.open { transform: translateX(0); }
+            .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+            .topbar { padding: 0 16px; }
+            .search-bar { display: none; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Score / progress circle */
+        .score-circle {
+            position: relative; width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            background: conic-gradient(var(--success) 0% 85%, var(--bg-main) 85% 100%); margin: 0 auto;
+        }
+        .score-inner { width: 100px; height: 100px; border-radius: 50%; background: var(--bg-card); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .score-val { font-size: 32px; font-weight: 700; color: var(--success); line-height: 1; }
+        .score-label { font-size: 12px; color: var(--text-sec); }
+
+        /* Goals */
+        .goal-card { display: flex; flex-direction: column; gap: 16px; }
+        .goal-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .goal-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .goal-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-sec); }
+        .goal-deadline { font-size: 12px; color: var(--text-sec); display: flex; align-items: center; gap: 6px; }
+
+        /* Calendar */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+        .calendar-weekday { text-align: center; font-size: 12px; color: var(--text-sec); font-weight: 600; text-transform: uppercase; padding-bottom: 8px; }
+        .calendar-day {
+            background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 10px; min-height: 84px;
+            padding: 8px; font-size: 13px; color: var(--text-sec); position: relative; display: flex; flex-direction: column; gap: 6px;
+        }
+        .calendar-day.empty { background: transparent; border: none; }
+        .calendar-day.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+        .calendar-day .day-num { font-weight: 600; color: var(--text-main); }
+        .day-event { font-size: 10.5px; padding: 2px 6px; border-radius: 5px; display: flex; align-items: center; gap: 4px; line-height: 1.3; }
+        .event-income { background: rgba(34,197,94,0.12); color: var(--success); }
+        .event-expense { background: rgba(239,68,68,0.12); color: var(--error); }
+        .event-invest { background: rgba(56,189,248,0.12); color: var(--accent); }
+        .legend-row { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-sec); }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        /* Simulator */
+        .sim-result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+        .sim-result-box { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; text-align: center; }
+        .sim-result-box .label { font-size: 12px; color: var(--text-sec); margin-bottom: 6px; }
+        .sim-result-box .value { font-size: 20px; font-weight: 700; }
+
+        /* Settings */
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border-color); }
+        .toggle-row:last-child { border-bottom: none; }
+        .toggle-row-text strong { display: block; font-size: 14px; margin-bottom: 2px; }
+        .toggle-row-text span { font-size: 12px; color: var(--text-sec); }
+        .switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: 24px; transition: 0.3s; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: var(--text-sec); border-radius: 50%; transition: 0.3s; }
+        .switch input:checked + .slider { background-color: var(--accent); border-color: var(--accent); }
+        .switch input:checked + .slider:before { transform: translateX(20px); background-color: #0F172A; }
+        .settings-profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 8px; }
+        .settings-avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #818CF8); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 24px; color: #fff; }
+
+        /* Report cards */
+        .report-type-card { display: flex; flex-direction: column; gap: 16px; }
+        .report-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(56,189,248,0.1); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="logo-area">
+            <i class="fa-solid fa-infinity"></i> Nexus
+        </div>
+        <nav class="nav-menu">
+            <a class="nav-item active" onclick="navigate('dashboard', this)"><i class="fa-solid fa-house"></i> Dashboard</a>
+            <a class="nav-item" onclick="navigate('receitas', this)"><i class="fa-solid fa-arrow-trend-up"></i> Receitas</a>
+            <a class="nav-item" onclick="navigate('despesas', this)"><i class="fa-solid fa-arrow-trend-down"></i> Despesas</a>
+            <a class="nav-item" onclick="navigate('orcamentos', this)"><i class="fa-solid fa-wallet"></i> Orçamentos</a>
+            <a class="nav-item" onclick="navigate('metas', this)"><i class="fa-solid fa-bullseye"></i> Metas</a>
+            <a class="nav-item" onclick="navigate('investimentos', this)"><i class="fa-solid fa-chart-pie"></i> Investimentos</a>
+            <a class="nav-item" onclick="navigate('dividas', this)"><i class="fa-solid fa-credit-card"></i> Dívidas</a>
+            <a class="nav-item" onclick="navigate('relatorios', this)"><i class="fa-solid fa-file-invoice"></i> Relatórios</a>
+            <a class="nav-item" onclick="navigate('calendario', this)"><i class="fa-solid fa-calendar"></i> Calendário</a>
+            <a class="nav-item" onclick="navigate('simulacoes', this)"><i class="fa-solid fa-flask"></i> Simulações</a>
+            <a class="nav-item" onclick="navigate('config', this)"><i class="fa-solid fa-gear"></i> Configurações</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-card">
+                <strong><i class="fa-solid fa-star" style="color: var(--accent); margin-right: 6px;"></i>Plano Premium</strong>
+                Acesso completo a simulações financeiras.
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-wrapper">
+        <header class="topbar">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Pesquisar transações, categorias...">
+            </div>
+            <div class="top-actions">
+                <button class="notification-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="badge"></span>
+                </button>
+                <div class="user-profile">
+                    <div class="avatar">AF</div>
+                    <span style="font-weight: 500; font-size: 14px;">Alexandre</span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 12px; color: var(--text-sec);"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-area">
+
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="page active">
+                <div class="header-actions">
+                    <div>
+                        <h1>Visão Geral</h1>
+                        <p class="subtitle">Seu resumo financeiro atualizado hoje.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal()"><i class="fa-solid fa-plus"></i> Nova Transação</button>
+                </div>
+
+                <div class="grid-4">
+                    <div class="card">
+                        <div class="kpi-title">Saldo Atual</div>
+                        <div class="kpi-value">R$ 14.850,00</div>
+                        <div class="kpi-trend trend-up"><i class="fa-solid fa-arrow-up"></i> +5.2% vs último mês</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Receita Mensal</div>
+                        <div class="kpi-value">R$ 22.400,00</div>
+                        <div class="kpi-trend trend-up"><i class="fa-solid fa-arrow-up"></i> +12.0% vs último mês</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Despesas Mensais</div>
+                        <div class="kpi-value">R$ 8.320,50</div>
+                        <div class="kpi-trend trend-down"><i class="fa-solid fa-arrow-down"></i> -3.1% vs último mês</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Economia Mensal</div>
+                        <div class="kpi-value">R$ 14.079,50</div>
+                        <div class="kpi-trend trend-up"><i class="fa-solid fa-arrow-up"></i> 62.8% taxa de poupança</div>
+                    </div>
+                </div>
+
+                <div class="grid-60-40">
+                    <div class="card">
+                        <h2>Fluxo de Caixa</h2>
+                        <p class="subtitle" style="margin-bottom: 16px;">Receitas e despesas dos últimos 6 meses</p>
+                        <canvas id="cashFlowChart" height="220"></canvas>
+                    </div>
+                    <div class="card">
+                        <h2>Despesas por Categoria</h2>
+                        <p class="subtitle" style="margin-bottom: 16px;">Distribuição do mês atual</p>
+                        <canvas id="expenseCategoryChart" height="220"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Transações Recentes</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th>Categoria</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><i class="fa-solid fa-briefcase" style="color: var(--success); margin-right: 8px;"></i>Salário — Empresa Horizon</td>
+                                    <td><span class="tag">Receita</span></td>
+                                    <td>05 Jun 2026</td>
+                                    <td><span class="status-badge status-success"><i class="fa-solid fa-check"></i> Confirmado</span></td>
+                                    <td style="color: var(--success); font-weight: 600;">+ R$ 18.000,00</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fa-solid fa-house" style="color: var(--error); margin-right: 8px;"></i>Aluguel — Apartamento</td>
+                                    <td><span class="tag">Moradia</span></td>
+                                    <td>05 Jun 2026</td>
+                                    <td><span class="status-badge status-success"><i class="fa-solid fa-check"></i> Pago</span></td>
+                                    <td style="color: var(--error); font-weight: 600;">- R$ 2.400,00</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fa-solid fa-laptop" style="color: var(--success); margin-right: 8px;"></i>Projeto Freelance — UX Studio</td>
+                                    <td><span class="tag">Receita</span></td>
+                                    <td>10 Jun 2026</td>
+                                    <td><span class="status-badge status-success"><i class="fa-solid fa-check"></i> Confirmado</span></td>
+                                    <td style="color: var(--success); font-weight: 600;">+ R$ 3.200,00</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fa-solid fa-cart-shopping" style="color: var(--error); margin-right: 8px;"></i>Supermercado Pão de Açúcar</td>
+                                    <td><span class="tag">Alimentação</span></td>
+                                    <td>12 Jun 2026</td>
+                                    <td><span class="status-badge status-success"><i class="fa-solid fa-check"></i> Pago</span></td>
+                                    <td style="color: var(--error); font-weight: 600;">- R$ 645,30</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fa-solid fa-credit-card" style="color: var(--warning); margin-right: 8px;"></i>Fatura Cartão Nubank</td>
+                                    <td><span class="tag">Cartão</span></td>
+                                    <td>20 Jun 2026</td>
+                                    <td><span class="status-badge status-warning"><i class="fa-solid fa-clock"></i> Pendente</span></td>
+                                    <td style="color: var(--error); font-weight: 600;">- R$ 1.842,90</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fa-solid fa-bolt" style="color: var(--error); margin-right: 8px;"></i>Conta de Luz — Enel</td>
+                                    <td><span class="tag">Utilidades</span></td>
+                                    <td>15 Jun 2026</td>
+                                    <td><span class="status-badge status-success"><i class="fa-solid fa-check"></i> Pago</span></td>
+                                    <td style="color: var(--error); font-weight: 600;">- R$ 218,40</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECEITAS -->
+            <div id="receitas" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Receitas</h1>
+                        <p class="subtitle">Acompanhe todas as suas fontes de renda.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('receita')"><i class="fa-solid fa-plus"></i> Nova Receita</button>
+                </div>
+
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="kpi-title">Total do Mês</div>
+                        <div class="kpi-value">R$ 22.400,00</div>
+                        <div class="kpi-trend trend-up"><i class="fa-solid fa-arrow-up"></i> +12.0% vs último mês</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Maior Fonte</div>
+                        <div class="kpi-value">Salário</div>
+                        <div class="kpi-trend" style="color: var(--text-sec);">80.4% da receita total</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Média Diária</div>
+                        <div class="kpi-value">R$ 746,67</div>
+                        <div class="kpi-trend trend-up"><i class="fa-solid fa-arrow-up"></i> +8.1% vs último mês</div>
+                    </div>
+                </div>
+
+                <div class="grid-60-40">
+                    <div class="card">
+                        <h2>Histórico de Receitas</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Fonte</th><th>Categoria</th><th>Data</th><th>Recorrência</th><th>Valor</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Salário — Empresa Horizon</td><td><span class="tag">Emprego</span></td><td>05 Jun 2026</td><td>Mensal</td><td style="color: var(--success); font-weight: 600;">R$ 18.000,00</td></tr>
+                                    <tr><td>Projeto Freelance — UX Studio</td><td><span class="tag">Freelance</span></td><td>10 Jun 2026</td><td>Eventual</td><td style="color: var(--success); font-weight: 600;">R$ 3.200,00</td></tr>
+                                    <tr><td>Dividendos — Carteira B3</td><td><span class="tag">Investimentos</span></td><td>14 Jun 2026</td><td>Mensal</td><td style="color: var(--success); font-weight: 600;">R$ 680,00</td></tr>
+                                    <tr><td>Aluguel Recebido — Imóvel SP</td><td><span class="tag">Aluguel</span></td><td>03 Jun 2026</td><td>Mensal</td><td style="color: var(--success); font-weight: 600;">R$ 1.450,00</td></tr>
+                                    <tr><td>Cashback Cartão</td><td><span class="tag">Outros</span></td><td>16 Jun 2026</td><td>Mensal</td><td style="color: var(--success); font-weight: 600;">R$ 70,00</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Receita por Fonte</h2>
+                        <canvas id="incomeSourceChart" height="240"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESPESAS -->
+            <div id="despesas" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Despesas</h1>
+                        <p class="subtitle">Veja para onde seu dinheiro está indo.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('despesa')"><i class="fa-solid fa-plus"></i> Nova Despesa</button>
+                </div>
+
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="kpi-title">Total Gasto no Mês</div>
+                        <div class="kpi-value">R$ 8.320,50</div>
+                        <div class="kpi-trend trend-down"><i class="fa-solid fa-arrow-down"></i> -3.1% vs último mês</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Categoria que Mais Pesa</div>
+                        <div class="kpi-value">Moradia</div>
+                        <div class="kpi-trend" style="color: var(--text-sec);">28.8% das despesas</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Gasto Médio Diário</div>
+                        <div class="kpi-value">R$ 277,35</div>
+                        <div class="kpi-trend trend-up"><i class="fa-solid fa-arrow-up"></i> +1.4% vs último mês</div>
+                    </div>
+                </div>
+
+                <div class="grid-60-40">
+                    <div class="card">
+                        <h2>Histórico de Despesas</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr><th>Descrição</th><th>Categoria</th><th>Data</th><th>Forma de Pagamento</th><th>Valor</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Aluguel — Apartamento</td><td><span class="tag">Moradia</span></td><td>05 Jun 2026</td><td>Transferência</td><td style="color: var(--error); font-weight: 600;">R$ 2.400,00</td></tr>
+                                    <tr><td>Supermercado Pão de Açúcar</td><td><span class="tag">Alimentação</span></td><td>12 Jun 2026</td><td>Cartão de Débito</td><td style="color: var(--error); font-weight: 600;">R$ 645,30</td></tr>
+                                    <tr><td>Fatura Cartão Nubank</td><td><span class="tag">Cartão</span></td><td>20 Jun 2026</td><td>Cartão de Crédito</td><td style="color: var(--error); font-weight: 600;">R$ 1.842,90</td></tr>
+                                    <tr><td>Conta de Luz — Enel</td><td><span class="tag">Utilidades</span></td><td>15 Jun 2026</td><td>Débito Automático</td><td style="color: var(--error); font-weight: 600;">R$ 218,40</td></tr>
+                                    <tr><td>Plano de Saúde — Amil</td><td><span class="tag">Saúde</span></td><td>08 Jun 2026</td><td>Débito Automático</td><td style="color: var(--error); font-weight: 600;">R$ 580,00</td></tr>
+                                    <tr><td>Academia — Smart Fit</td><td><span class="tag">Saúde</span></td><td>03 Jun 2026</td><td>Cartão de Crédito</td><td style="color: var(--error); font-weight: 600;">R$ 119,90</td></tr>
+                                    <tr><td>Streaming — Netflix + Spotify</td><td><span class="tag">Lazer</span></td><td>02 Jun 2026</td><td>Cartão de Crédito</td><td style="color: var(--error); font-weight: 600;">R$ 64,80</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Despesas por Categoria</h2>
+                        <canvas id="expenseBreakdownChart" height="240"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORÇAMENTOS -->
+            <div id="orcamentos" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Orçamentos</h1>
+                        <p class="subtitle">Defina limites e acompanhe seus gastos por categoria.</p>
+                    </div>
+                    <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Novo Orçamento</button>
+                </div>
+
+                <div class="grid-3">
+                    <div class="card">
+                        <div style="display:flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-weight: 600;"><i class="fa-solid fa-utensils" style="color: var(--accent); margin-right: 8px;"></i>Alimentação</span>
+                            <span style="color: var(--text-sec); font-size: 13px;">R$ 645 / R$ 900</span>
+                        </div>
+                        <div class="progress-container"><div class="progress-bar" style="width: 72%; background: var(--accent);"></div></div>
+                        <p class="kpi-trend" style="margin-top: 10px; color: var(--text-sec);">72% utilizado · R$ 255,00 restantes</p>
+                    </div>
+                    <div class="card">
+                        <div style="display:flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-weight: 600;"><i class="fa-solid fa-house" style="color: var(--purple); margin-right: 8px;"></i>Moradia</span>
+                            <span style="color: var(--text-sec); font-size: 13px;">R$ 2.400 / R$ 2.500</span>
+                        </div>
+                        <div class="progress-container"><div class="progress-bar" style="width: 96%; background: var(--warning);"></div></div>
+                        <p class="kpi-trend" style="margin-top: 10px; color: var(--warning);">96% utilizado · quase no limite</p>
+                    </div>
+                    <div class="card">
+                        <div style="display:flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-weight: 600;"><i class="fa-solid fa-car" style="color: var(--success); margin-right: 8px;"></i>Transporte</span>
+                            <span style="color: var(--text-sec); font-size: 13px;">R$ 320 / R$ 600</span>
+                        </div>
+                        <div class="progress-container"><div class="progress-bar" style="width: 53%; background: var(--success);"></div></div>
+                        <p class="kpi-trend" style="margin-top: 10px; color: var(--text-sec);">53% utilizado · R$ 280,00 restantes</p>
+                    </div>
+                    <div class="card">
+                        <div style="display:flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-weight: 600;"><i class="fa-solid fa-film" style="color: var(--accent); margin-right: 8px;"></i>Lazer</span>
+                            <span style="color: var(--text-sec); font-size: 13px;">R$ 410 / R$ 500</span>
+                        </div>
+                        <div class="progress-container"><div class="progress-bar" style="width: 82%; background: var(--accent);"></div></div>
+                        <p class="kpi-trend" style="margin-top: 10px; color: var(--text-sec);">82% utilizado · R$ 90,00 restantes</p>
+                    </div>
+                    <div class="card">
+                        <div style="display:flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-weight: 600;"><i class="fa-solid fa-heart-pulse" style="color: var(--error); margin-right: 8px;"></i>Saúde</span>
+                            <span style="color: var(--text-sec); font-size: 13px;">R$ 700 / R$ 700</span>
+                        </div>
+                        <div class="progress-container"><div class="progress-bar" style="width: 100%; background: var(--error);"></div></div>
+                        <p class="kpi-trend" style="margin-top: 10px; color: var(--error);">100% utilizado · limite atingido</p>
+                    </div>
+                    <div class="card">
+                        <div style="display:flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-weight: 600;"><i class="fa-solid fa-graduation-cap" style="color: var(--purple); margin-right: 8px;"></i>Educação</span>
+                            <span style="color: var(--text-sec); font-size: 13px;">R$ 180 / R$ 400</span>
+                        </div>
+                        <div class="progress-container"><div class="progress-bar" style="width: 45%; background: var(--success);"></div></div>
+                        <p class="kpi-trend" style="margin-top: 10px; color: var(--text-sec);">45% utilizado · R$ 220,00 restantes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- METAS -->
+            <div id="metas" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Metas Financeiras</h1>
+                        <p class="subtitle">Acompanhe o progresso dos seus objetivos.</p>
+                    </div>
+                    <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Nova Meta</button>
+                </div>
+
+                <div class="grid-3">
+                    <div class="card goal-card">
+                        <div class="goal-header">
+                            <div class="goal-icon" style="background: rgba(56,189,248,0.12); color: var(--accent);"><i class="fa-solid fa-plane"></i></div>
+                            <span class="status-badge status-success">Em dia</span>
+                        </div>
+                        <div>
+                            <h2 style="margin-bottom: 4px;">Viagem à Europa</h2>
+                            <div class="progress-container"><div class="progress-bar" style="width: 64%; background: var(--accent);"></div></div>
+                        </div>
+                        <div class="goal-meta"><span>R$ 9.600 de R$ 15.000</span><span>64%</span></div>
+                        <div class="goal-deadline"><i class="fa-regular fa-calendar"></i> Meta: Dezembro 2026</div>
+                    </div>
+                    <div class="card goal-card">
+                        <div class="goal-header">
+                            <div class="goal-icon" style="background: rgba(34,197,94,0.12); color: var(--success);"><i class="fa-solid fa-shield-halved"></i></div>
+                            <span class="status-badge status-success">Em dia</span>
+                        </div>
+                        <div>
+                            <h2 style="margin-bottom: 4px;">Reserva de Emergência</h2>
+                            <div class="progress-container"><div class="progress-bar" style="width: 88%; background: var(--success);"></div></div>
+                        </div>
+                        <div class="goal-meta"><span>R$ 26.400 de R$ 30.000</span><span>88%</span></div>
+                        <div class="goal-deadline"><i class="fa-regular fa-calendar"></i> Meta: Setembro 2026</div>
+                    </div>
+                    <div class="card goal-card">
+                        <div class="goal-header">
+                            <div class="goal-icon" style="background: rgba(245,158,11,0.12); color: var(--warning);"><i class="fa-solid fa-car"></i></div>
+                            <span class="status-badge status-warning">Atrasada</span>
+                        </div>
+                        <div>
+                            <h2 style="margin-bottom: 4px;">Carro Novo</h2>
+                            <div class="progress-container"><div class="progress-bar" style="width: 31%; background: var(--warning);"></div></div>
+                        </div>
+                        <div class="goal-meta"><span>R$ 15.500 de R$ 50.000</span><span>31%</span></div>
+                        <div class="goal-deadline"><i class="fa-regular fa-calendar"></i> Meta: Março 2027</div>
+                    </div>
+                    <div class="card goal-card">
+                        <div class="goal-header">
+                            <div class="goal-icon" style="background: rgba(129,140,248,0.12); color: var(--purple);"><i class="fa-solid fa-graduation-cap"></i></div>
+                            <span class="status-badge status-success">Em dia</span>
+                        </div>
+                        <div>
+                            <h2 style="margin-bottom: 4px;">MBA Internacional</h2>
+                            <div class="progress-container"><div class="progress-bar" style="width: 52%; background: var(--purple);"></div></div>
+                        </div>
+                        <div class="goal-meta"><span>R$ 20.800 de R$ 40.000</span><span>52%</span></div>
+                        <div class="goal-deadline"><i class="fa-regular fa-calendar"></i> Meta: Julho 2027</div>
+                    </div>
+                    <div class="card goal-card">
+                        <div class="goal-header">
+                            <div class="goal-icon" style="background: rgba(56,189,248,0.12); color: var(--accent);"><i class="fa-solid fa-laptop"></i></div>
+                            <span class="status-badge status-success">Concluída</span>
+                        </div>
+                        <div>
+                            <h2 style="margin-bottom: 4px;">Novo Notebook</h2>
+                            <div class="progress-container"><div class="progress-bar" style="width: 100%; background: var(--success);"></div></div>
+                        </div>
+                        <div class="goal-meta"><span>R$ 8.000 de R$ 8.000</span><span>100%</span></div>
+                        <div class="goal-deadline"><i class="fa-regular fa-calendar"></i> Concluída em Maio 2026</div>
+                    </div>
+                    <div class="card goal-card" style="align-items: center; justify-content: center; border: 1px dashed var(--border-color); background: transparent; box-shadow: none; cursor: pointer;">
+                        <i class="fa-solid fa-plus" style="font-size: 24px; color: var(--text-sec);"></i>
+                        <span style="color: var(--text-sec); font-size: 14px;">Criar nova meta</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INVESTIMENTOS -->
+            <div id="investimentos" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Investimentos</h1>
+                        <p class="subtitle">Sua carteira consolidada em um só lugar.</p>
+                    </div>
+                    <button class="btn btn-outline"><i class="fa-solid fa-arrow-up-right-from-square"></i> Exportar carteira</button>
+                </div>
+
+                <div class="grid-4">
+                    <div class="card">
+                        <div class="kpi-title">Patrimônio Total</div>
+                        <div class="kpi-value">R$ 187.420,00</div>
+                        <div class="kpi-trend trend-up"><i class="fa-solid fa-arrow-up"></i> +3.4% no mês</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Rentabilidade no Ano</div>
+                        <div class="kpi-value">+14.8%</div>
+                        <div class="kpi-trend trend-up"><i class="fa-solid fa-arrow-up"></i> acima do CDI</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Aportes no Mês</div>
+                        <div class="kpi-value">R$ 4.200,00</div>
+                        <div class="kpi-trend" style="color: var(--text-sec);">automático todo dia 25</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Dividendos Recebidos</div>
+                        <div class="kpi-value">R$ 680,00</div>
+                        <div class="kpi-trend trend-up"><i class="fa-solid fa-arrow-up"></i> +9.6% vs último mês</div>
+                    </div>
+                </div>
+
+                <div class="grid-60-40">
+                    <div class="card">
+                        <h2>Carteira por Classe de Ativo</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead><tr><th>Ativo</th><th>Classe</th><th>Valor Investido</th><th>Rentabilidade</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Tesouro Selic 2029</td><td><span class="tag">Renda Fixa</span></td><td>R$ 62.000,00</td><td style="color: var(--success);">+12.1%</td></tr>
+                                    <tr><td>ITSA4, BBAS3, WEGE3</td><td><span class="tag">Ações</span></td><td>R$ 48.500,00</td><td style="color: var(--success);">+18.7%</td></tr>
+                                    <tr><td>HGLG11, KNRI11</td><td><span class="tag">Fundos Imobiliários</span></td><td>R$ 35.200,00</td><td style="color: var(--success);">+9.4%</td></tr>
+                                    <tr><td>ETF S&amp;P 500 (IVVB11)</td><td><span class="tag">Internacional</span></td><td>R$ 28.720,00</td><td style="color: var(--success);">+21.3%</td></tr>
+                                    <tr><td>Bitcoin &amp; Ethereum</td><td><span class="tag">Cripto</span></td><td>R$ 13.000,00</td><td style="color: var(--error);">-6.2%</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Alocação da Carteira</h2>
+                        <canvas id="investmentAllocationChart" height="240"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DÍVIDAS -->
+            <div id="dividas" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Dívidas</h1>
+                        <p class="subtitle">Controle seus financiamentos e parcelamentos.</p>
+                    </div>
+                    <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Adicionar Dívida</button>
+                </div>
+
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="kpi-title">Total em Aberto</div>
+                        <div class="kpi-value">R$ 64.380,00</div>
+                        <div class="kpi-trend trend-down"><i class="fa-solid fa-arrow-down"></i> -4.2% vs último mês</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Pagamento Mensal Total</div>
+                        <div class="kpi-value">R$ 3.180,00</div>
+                        <div class="kpi-trend" style="color: var(--text-sec);">comprometendo 14.2% da renda</div>
+                    </div>
+                    <div class="card">
+                        <div class="kpi-title">Previsão de Quitação</div>
+                        <div class="kpi-value">22 meses</div>
+                        <div class="kpi-trend" style="color: var(--text-sec);">mantendo o ritmo atual</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Dívidas Ativas</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Dívida</th><th>Saldo Devedor</th><th>Taxa de Juros</th><th>Parcela Mensal</th><th>Progresso</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td><i class="fa-solid fa-car" style="margin-right: 8px; color: var(--accent);"></i>Financiamento Veículo</td>
+                                    <td>R$ 38.200,00</td>
+                                    <td>1.4% a.m.</td>
+                                    <td>R$ 1.480,00</td>
+                                    <td style="min-width: 140px;"><div class="progress-container"><div class="progress-bar" style="width: 38%; background: var(--accent);"></div></div></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fa-solid fa-credit-card" style="margin-right: 8px; color: var(--warning);"></i>Cartão de Crédito (parcelado)</td>
+                                    <td>R$ 14.680,00</td>
+                                    <td>11.9% a.m.</td>
+                                    <td>R$ 980,00</td>
+                                    <td style="min-width: 140px;"><div class="progress-container"><div class="progress-bar" style="width: 61%; background: var(--warning);"></div></div></td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fa-solid fa-graduation-cap" style="margin-right: 8px; color: var(--purple);"></i>Empréstimo Estudantil</td>
+                                    <td>R$ 11.500,00</td>
+                                    <td>0.9% a.m.</td>
+                                    <td>R$ 520,00</td>
+                                    <td style="min-width: 140px;"><div class="progress-container"><div class="progress-bar" style="width: 72%; background: var(--purple);"></div></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RELATÓRIOS -->
+            <div id="relatorios" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Relatórios</h1>
+                        <p class="subtitle">Gere relatórios detalhados da sua vida financeira.</p>
+                    </div>
+                </div>
+
+                <div class="grid-3">
+                    <div class="card report-type-card">
+                        <div class="report-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                        <div>
+                            <h2 style="margin-bottom: 4px;">Resumo Mensal</h2>
+                            <p class="subtitle" style="margin: 0;">Receitas, despesas e economia de junho de 2026.</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatório</button>
+                    </div>
+                    <div class="card report-type-card">
+                        <div class="report-icon" style="background: rgba(129,140,248,0.1); color: var(--purple);"><i class="fa-solid fa-chart-line"></i></div>
+                        <div>
+                            <h2 style="margin-bottom: 4px;">Relatório Anual</h2>
+                            <p class="subtitle" style="margin: 0;">Consolidado completo do ano de 2026.</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatório</button>
+                    </div>
+                    <div class="card report-type-card">
+                        <div class="report-icon" style="background: rgba(34,197,94,0.1); color: var(--success);"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <div>
+                            <h2 style="margin-bottom: 4px;">Declaração de IR</h2>
+                            <p class="subtitle" style="margin: 0;">Organize bens, rendas e investimentos.</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatório</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Receitas vs Despesas — últimos 6 meses</h2>
+                    <canvas id="reportsSummaryChart" height="260"></canvas>
+                </div>
+            </div>
+
+            <!-- CALENDÁRIO -->
+            <div id="calendario" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Calendário Financeiro</h1>
+                        <p class="subtitle">Junho de 2026 — vencimentos, recebimentos e aportes.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="calendar-grid">
+                        <div class="calendar-weekday">Dom</div>
+                        <div class="calendar-weekday">Seg</div>
+                        <div class="calendar-weekday">Ter</div>
+                        <div class="calendar-weekday">Qua</div>
+                        <div class="calendar-weekday">Qui</div>
+                        <div class="calendar-weekday">Sex</div>
+                        <div class="calendar-weekday">Sáb</div>
+
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day"><span class="day-num">1</span></div>
+                        <div class="calendar-day"><span class="day-num">2</span><div class="day-event event-expense">Streaming</div></div>
+                        <div class="calendar-day"><span class="day-num">3</span><div class="day-event event-expense">Academia</div></div>
+                        <div class="calendar-day"><span class="day-num">4</span></div>
+                        <div class="calendar-day"><span class="day-num">5</span><div class="day-event event-income">Salário</div><div class="day-event event-expense">Aluguel</div></div>
+                        <div class="calendar-day"><span class="day-num">6</span></div>
+
+                        <div class="calendar-day"><span class="day-num">7</span></div>
+                        <div class="calendar-day"><span class="day-num">8</span><div class="day-event event-expense">Plano de Saúde</div></div>
+                        <div class="calendar-day"><span class="day-num">9</span></div>
+                        <div class="calendar-day"><span class="day-num">10</span><div class="day-event event-income">Freelance</div></div>
+                        <div class="calendar-day"><span class="day-num">11</span></div>
+                        <div class="calendar-day"><span class="day-num">12</span><div class="day-event event-expense">Supermercado</div></div>
+                        <div class="calendar-day"><span class="day-num">13</span></div>
+
+                        <div class="calendar-day"><span class="day-num">14</span><div class="day-event event-income">Dividendos</div></div>
+                        <div class="calendar-day"><span class="day-num">15</span><div class="day-event event-expense">Conta de Luz</div></div>
+                        <div class="calendar-day"><span class="day-num">16</span><div class="day-event event-income">Cashback</div></div>
+                        <div class="calendar-day today"><span class="day-num">17</span></div>
+                        <div class="calendar-day"><span class="day-num">18</span></div>
+                        <div class="calendar-day"><span class="day-num">19</span></div>
+                        <div class="calendar-day"><span class="day-num">20</span><div class="day-event event-expense">Fatura Cartão</div></div>
+
+                        <div class="calendar-day"><span class="day-num">21</span></div>
+                        <div class="calendar-day"><span class="day-num">22</span></div>
+                        <div class="calendar-day"><span class="day-num">23</span></div>
+                        <div class="calendar-day"><span class="day-num">24</span></div>
+                        <div class="calendar-day"><span class="day-num">25</span><div class="day-event event-invest">Aporte Automático</div></div>
+                        <div class="calendar-day"><span class="day-num">26</span></div>
+                        <div class="calendar-day"><span class="day-num">27</span><div class="day-event event-expense">Parcela Financiamento</div></div>
+
+                        <div class="calendar-day"><span class="day-num">28</span></div>
+                        <div class="calendar-day"><span class="day-num">29</span></div>
+                        <div class="calendar-day"><span class="day-num">30</span></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                    </div>
+                    <div class="legend-row">
+                        <div class="legend-item"><span class="legend-dot" style="background: var(--success);"></span> Receita</div>
+                        <div class="legend-item"><span class="legend-dot" style="background: var(--error);"></span> Despesa</div>
+                        <div class="legend-item"><span class="legend-dot" style="background: var(--accent);"></span> Investimento</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIMULAÇÕES -->
+            <div id="simulacoes" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Simulações</h1>
+                        <p class="subtitle">Projete cenários antes de tomar decisões financeiras.</p>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h2><i class="fa-solid fa-chart-simple" style="color: var(--accent); margin-right: 8px;"></i>Juros Compostos</h2>
+                        <div class="form-group"><label>Valor inicial (R$)</label><input type="number" class="form-control" id="simValorInicial" value="5000"></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Aporte mensal (R$)</label><input type="number" class="form-control" id="simAporte" value="500"></div>
+                            <div class="form-group"><label>Taxa de juros anual (%)</label><input type="number" class="form-control" id="simTaxa" value="10"></div>
+                        </div>
+                        <div class="form-group"><label>Período (meses)</label><input type="number" class="form-control" id="simMeses" value="60"></div>
+                        <button class="btn btn-primary" onclick="calcularJurosCompostos()" style="width: 100%; justify-content: center;"><i class="fa-solid fa-calculator"></i> Calcular</button>
+                        <div class="sim-result-grid">
+                            <div class="sim-result-box"><div class="label">Total Investido</div><div class="value" id="simInvestido" style="color: var(--text-main);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Total em Juros</div><div class="value" id="simJuros" style="color: var(--success);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Valor Final</div><div class="value" id="simFinal" style="color: var(--accent);">—</div></div>
+                        </div>
+                        <canvas id="simChart" height="180" style="margin-top: 20px;"></canvas>
+                    </div>
+
+                    <div class="card">
+                        <h2><i class="fa-solid fa-hand-holding-dollar" style="color: var(--purple); margin-right: 8px;"></i>Simulador de Empréstimo</h2>
+                        <div class="form-group"><label>Valor do empréstimo (R$)</label><input type="number" class="form-control" id="loanValor" value="20000"></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Taxa de juros mensal (%)</label><input type="number" class="form-control" id="loanTaxa" value="1.8" step="0.1"></div>
+                            <div class="form-group"><label>Número de parcelas</label><input type="number" class="form-control" id="loanParcelas" value="24"></div>
+                        </div>
+                        <button class="btn btn-primary" onclick="calcularEmprestimo()" style="width: 100%; justify-content: center;"><i class="fa-solid fa-calculator"></i> Calcular</button>
+                        <div class="sim-result-grid">
+                            <div class="sim-result-box"><div class="label">Parcela Mensal</div><div class="value" id="loanParcela" style="color: var(--text-main);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Total de Juros</div><div class="value" id="loanJuros" style="color: var(--error);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Total Pago</div><div class="value" id="loanTotal" style="color: var(--purple);">—</div></div>
+                        </div>
+                        <p class="subtitle" style="margin-top: 24px; margin-bottom: 0;">Simulação ilustrativa. Condições reais dependem da instituição financeira.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONFIGURAÇÕES -->
+            <div id="config" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Configurações</h1>
+                        <p class="subtitle">Gerencie seu perfil, preferências e segurança.</p>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h2>Perfil</h2>
+                        <div class="settings-profile-header">
+                            <div class="settings-avatar">AF</div>
+                            <div>
+                                <button class="btn btn-outline" style="margin-bottom: 4px;">Alterar foto</button>
+                                <p class="subtitle" style="margin: 4px 0 0;">JPG ou PNG, até 2MB.</p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Nome completo</label><input type="text" class="form-control" value="Alexandre Ferreira"></div>
+                            <div class="form-group"><label>E-mail</label><input type="email" class="form-control" value="alexandre.ferreira@email.com"></div>
+                        </div>
+                        <div class="form-group"><label>Telefone</label><input type="text" class="form-control" value="(11) 98765-4321"></div>
+                        <button class="btn btn-primary">Salvar alterações</button>
+                    </div>
+
+                    <div class="card">
+                        <h2>Preferências</h2>
+                        <div class="form-group"><label>Moeda padrão</label>
+                            <select class="form-control">
+                                <option>Real Brasileiro (R$)</option>
+                                <option>Dólar Americano (US$)</option>
+                                <option>Euro (€)</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Idioma</label>
+                            <select class="form-control">
+                                <option>Português (Brasil)</option>
+                                <option>English (US)</option>
+                                <option>Español</option>
+                            </select>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-row-text"><strong>Alertas de orçamento</strong><span>Avisar quando atingir 80% do limite</span></div>
+                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-row-text"><strong>Resumo semanal por e-mail</strong><span>Receber todo domingo às 8h</span></div>
+                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-row-text"><strong>Modo escuro</strong><span>Reduz o brilho da interface</span></div>
+                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Segurança</h2>
+                        <div class="form-group"><label>Senha atual</label><input type="password" class="form-control" placeholder="••••••••"></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Nova senha</label><input type="password" class="form-control" placeholder="••••••••"></div>
+                            <div class="form-group"><label>Confirmar nova senha</label><input type="password" class="form-control" placeholder="••••••••"></div>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-row-text"><strong>Autenticação em duas etapas</strong><span>Proteção extra ao fazer login</span></div>
+                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                        </div>
+                        <button class="btn btn-primary" style="margin-top: 16px;">Atualizar senha</button>
+                    </div>
+
+                    <div class="card">
+                        <h2>Contas Conectadas</h2>
+                        <div class="toggle-row">
+                            <div class="toggle-row-text"><strong>Nubank</strong><span>Conta corrente conectada</span></div>
+                            <span class="status-badge status-success">Ativa</span>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-row-text"><strong>Itaú</strong><span>Conta corrente conectada</span></div>
+                            <span class="status-badge status-success">Ativa</span>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-row-text"><strong>XP Investimentos</strong><span>Corretora conectada</span></div>
+                            <span class="status-badge status-success">Ativa</span>
+                        </div>
+                        <button class="btn btn-outline" style="margin-top: 16px;"><i class="fa-solid fa-link"></i> Conectar nova conta</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- MODAL: NOVA TRANSAÇÃO -->
+<div class="modal-overlay" id="transactionModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Nova Transação</h2>
+            <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="type-toggle" id="typeToggle">
+            <label class="checked" onclick="setTransactionType('receita')"><input type="radio" name="tType" checked><span><i class="fa-solid fa-arrow-trend-up"></i> Receita</span></label>
+            <label onclick="setTransactionType('despesa')"><input type="radio" name="tType"><span><i class="fa-solid fa-arrow-trend-down"></i> Despesa</span></label>
+        </div>
+        <div class="form-group" style="margin-top: 16px;">
+            <label>Descrição</label>
+            <input type="text" class="form-control" placeholder="Ex: Salário, Supermercado...">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Valor (R$)</label>
+                <input type="number" class="form-control" placeholder="0,00">
+            </div>
+            <div class="form-group">
+                <label>Data</label>
+                <input type="date" class="form-control" value="2026-06-17">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Categoria</label>
+            <select class="form-control">
+                <option>Salário</option>
+                <option>Freelance</option>
+                <option>Moradia</option>
+                <option>Alimentação</option>
+                <option>Transporte</option>
+                <option>Lazer</option>
+                <option>Saúde</option>
+                <option>Educação</option>
+                <option>Outros</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Recorrência</label>
+            <select class="form-control">
+                <option>Única</option>
+                <option>Mensal</option>
+                <option>Semanal</option>
+                <option>Anual</option>
+            </select>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeModal()">Cancelar</button>
+            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="closeModal()"><i class="fa-solid fa-check"></i> Salvar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ---------- NAVIGATION ---------- */
+    const chartState = {};
+
+    function navigate(pageId, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        if (el) el.classList.add('active');
+        initChartsForPage(pageId);
+    }
+
+    /* ---------- MODAL ---------- */
+    function openModal(type) {
+        document.getElementById('transactionModal').classList.add('open');
+        if (type) setTransactionType(type, true);
+    }
+    function closeModal() {
+        document.getElementById('transactionModal').classList.remove('open');
+    }
+    function setTransactionType(type, force) {
+        const labels = document.querySelectorAll('#typeToggle label');
+        labels.forEach(l => l.classList.remove('checked'));
+        const idx = type === 'receita' ? 0 : 1;
+        labels[idx].classList.add('checked');
+        labels[idx].querySelector('input').checked = true;
+    }
+    document.getElementById('transactionModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    /* ---------- CHARTS ---------- */
+    function chartDefaults() {
+        Chart.defaults.color = '#94A3B8';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.1)';
+    }
+
+    function initChartsForPage(pageId) {
+        if (chartState[pageId]) return;
+        chartState[pageId] = true;
+        chartDefaults();
+
+        if (pageId === 'dashboard') {
+            new Chart(document.getElementById('cashFlowChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [
+                        { label: 'Receitas', data: [19500, 20100, 20800, 21200, 21900, 22400], borderColor: '#22C55E', backgroundColor: 'rgba(34,197,94,0.08)', tension: 0.4, fill: true },
+                        { label: 'Despesas', data: [9100, 8950, 8700, 8600, 8590, 8320], borderColor: '#EF4444', backgroundColor: 'rgba(239,68,68,0.08)', tension: 0.4, fill: true }
+                    ]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { grid: { color: 'rgba(148,163,184,0.08)' } }, x: { grid: { display: false } } } }
+            });
+
+            new Chart(document.getElementById('expenseCategoryChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Moradia', 'Cartão', 'Alimentação', 'Saúde', 'Lazer', 'Utilidades'],
+                    datasets: [{ data: [2400, 1843, 645, 700, 475, 218], backgroundColor: ['#818CF8', '#F59E0B', '#38BDF8', '#EF4444', '#22C55E', '#94A3B8'], borderWidth: 0 }]
+                },
+                options: { responsive: true, cutout: '65%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12 } } } }
+            });
+        }
+
+        if (pageId === 'receitas') {
+            new Chart(document.getElementById('incomeSourceChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Salário', 'Freelance', 'Aluguel', 'Dividendos', 'Outros'],
+                    datasets: [{ data: [18000, 3200, 1450, 680, 70], backgroundColor: ['#38BDF8', '#818CF8', '#22C55E', '#F59E0B', '#94A3B8'], borderWidth: 0 }]
+                },
+                options: { responsive: true, cutout: '60%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12 } } } }
+            });
+        }
+
+        if (pageId === 'despesas') {
+            new Chart(document.getElementById('expenseBreakdownChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Moradia', 'Cartão', 'Saúde', 'Alimentação', 'Lazer', 'Utilidades'],
+                    datasets: [{ data: [2400, 1843, 700, 645, 184.7, 218.4], backgroundColor: '#38BDF8', borderRadius: 6 }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { grid: { color: 'rgba(148,163,184,0.08)' } }, x: { grid: { display: false } } } }
+            });
+        }
+
+        if (pageId === 'investimentos') {
+            new Chart(document.getElementById('investmentAllocationChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Renda Fixa', 'Ações', 'Fundos Imobiliários', 'Internacional', 'Cripto'],
+                    datasets: [{ data: [62000, 48500, 35200, 28720, 13000], backgroundColor: ['#38BDF8', '#22C55E', '#818CF8', '#F59E0B', '#EF4444'], borderWidth: 0 }]
+                },
+                options: { responsive: true, cutout: '60%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12 } } } }
+            });
+        }
+
+        if (pageId === 'relatorios') {
+            new Chart(document.getElementById('reportsSummaryChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [
+                        { label: 'Receitas', data: [19500, 20100, 20800, 21200, 21900, 22400], backgroundColor: '#22C55E', borderRadius: 6 },
+                        { label: 'Despesas', data: [9100, 8950, 8700, 8600, 8590, 8320], backgroundColor: '#EF4444', borderRadius: 6 }
+                    ]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { grid: { color: 'rgba(148,163,184,0.08)' } }, x: { grid: { display: false } } } }
+            });
+        }
+    }
+
+    /* ---------- SIMULATORS ---------- */
+    function formatBRL(v) {
+        return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    let simChartInstance = null;
+    function calcularJurosCompostos() {
+        const inicial = parseFloat(document.getElementById('simValorInicial').value) || 0;
+        const aporte = parseFloat(document.getElementById('simAporte').value) || 0;
+        const taxaAnual = parseFloat(document.getElementById('simTaxa').value) || 0;
+        const meses = parseInt(document.getElementById('simMeses').value) || 0;
+        const taxaMensal = Math.pow(1 + taxaAnual / 100, 1 / 12) - 1;
+
+        let saldo = inicial;
+        let investido = inicial;
+        const series = [saldo];
+        for (let i = 1; i <= meses; i++) {
+            saldo = saldo * (1 + taxaMensal) + aporte;
+            investido += aporte;
+            series.push(saldo);
+        }
+        const juros = saldo - investido;
+
+        document.getElementById('simInvestido').textContent = formatBRL(investido);
+        document.getElementById('simJuros').textContent = formatBRL(juros);
+        document.getElementById('simFinal').textContent = formatBRL(saldo);
+
+        const labels = series.map((_, i) => i === 0 ? 'Início' : 'Mês ' + i);
+        const sampledLabels = [];
+        const sampledData = [];
+        const step = Math.max(1, Math.floor(series.length / 24));
+        for (let i = 0; i < series.length; i += step) {
+            sampledLabels.push(labels[i]);
+            sampledData.push(Math.round(series[i]));
+        }
+
+        chartDefaults();
+        if (simChartInstance) simChartInstance.destroy();
+        simChartInstance = new Chart(document.getElementById('simChart'), {
+            type: 'line',
+            data: { labels: sampledLabels, datasets: [{ label: 'Saldo projetado', data: sampledData, borderColor: '#38BDF8', backgroundColor: 'rgba(56,189,248,0.08)', tension: 0.35, fill: true, pointRadius: 0 }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { grid: { color: 'rgba(148,163,184,0.08)' } }, x: { grid: { display: false }, ticks: { maxTicksLimit: 6 } } } }
+        });
+    }
+
+    function calcularEmprestimo() {
+        const valor = parseFloat(document.getElementById('loanValor').value) || 0;
+        const taxaMensal = (parseFloat(document.getElementById('loanTaxa').value) || 0) / 100;
+        const n = parseInt(document.getElementById('loanParcelas').value) || 1;
+
+        let parcela;
+        if (taxaMensal === 0) {
+            parcela = valor / n;
+        } else {
+            parcela = valor * taxaMensal / (1 - Math.pow(1 + taxaMensal, -n));
+        }
+        const totalPago = parcela * n;
+        const totalJuros = totalPago - valor;
+
+        document.getElementById('loanParcela').textContent = formatBRL(parcela);
+        document.getElementById('loanJuros').textContent = formatBRL(totalJuros);
+        document.getElementById('loanTotal').textContent = formatBRL(totalPago);
+    }
+
+    /* ---------- INIT ---------- */
+    chartDefaults();
+    initChartsForPage('dashboard');
+    calcularJurosCompostos();
+</script>
+
+</body>
+</html>
