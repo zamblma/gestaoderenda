@@ -178,6 +178,8 @@
                 updateAvatar();
                 await loadProfiles();
                 loadAllData();
+                setupSearch();
+                setupNotifications();
             } else {
                 currentUser = null;
                 document.getElementById('authOverlay').style.display = 'flex';
@@ -211,7 +213,37 @@
         if (!ref) return [];
         try {
             const snap = await ref.collection('transactions').orderBy('data', 'desc').get();
-            return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const transactions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+            const today = now.getDate();
+            const extras = [];
+            transactions.forEach(t => {
+                if (t.recorrencia !== 'Mensal') return;
+                const orig = new Date(t.data + (t.data.includes('T') ? '' : 'T12:00:00'));
+                const origDay = orig.getDate();
+                const monthsSince = (currentYear - orig.getFullYear()) * 12 + (currentMonth - orig.getMonth());
+                if (monthsSince <= 0) return;
+                const alreadyExists = transactions.some(e => {
+                    const ed = new Date(e.data + (e.data.includes('T') ? '' : 'T12:00:00'));
+                    return e.tipo === t.tipo && e.descricao === t.descricao && ed.getDate() === origDay && ed.getMonth() === currentMonth && ed.getFullYear() === currentYear;
+                });
+                if (alreadyExists) return;
+                const virtualDate = currentYear + '-' + String(currentMonth + 1).padStart(2, '0') + '-' + String(origDay).padStart(2, '0');
+                extras.push({
+                    id: 'virt_' + t.id,
+                    descricao: t.descricao,
+                    valor: t.valor,
+                    data: virtualDate,
+                    categoria: t.categoria,
+                    recorrencia: 'Mensal',
+                    status: 'Pendente',
+                    tipo: t.tipo,
+                    virtual: true
+                });
+            });
+            return [...extras, ...transactions];
         } catch (e) {
             console.warn('Erro ao carregar transacoes (verifique regras do Firestore):', e.message);
             return [];
@@ -222,12 +254,6 @@
         const ref = getUserRef();
         if (!ref) return;
         await ref.collection('transactions').add(data);
-    }
-
-    async function deleteTransaction(id) {
-        const ref = getUserRef();
-        if (!ref) return;
-        await ref.collection('transactions').doc(id).delete();
     }
 
     async function loadBudgets() {
@@ -859,7 +885,8 @@
     }
 
     async function saveTransaction() {
-        const id = document.getElementById('transactionId').value;
+        const rawId = document.getElementById('transactionId').value;
+        const id = rawId && !rawId.startsWith('virt_') ? rawId : '';
         const descricao = document.getElementById('tDescricao').value;
         const valor = document.getElementById('tValor').value;
         const data = document.getElementById('tData').value;
@@ -1033,6 +1060,14 @@
         const ref = getUserRef();
         if (!ref) return;
         try {
+            if (id.startsWith('virt_')) {
+                const realId = id.replace('virt_', '');
+                const doc = await ref.collection('transactions').doc(realId).get();
+                if (!doc.exists) return;
+                const t = { ...doc.data(), id: '' };
+                openTransactionModal(t.tipo, '', t);
+                return;
+            }
             const doc = await ref.collection('transactions').doc(id).get();
             if (!doc.exists) return;
             const t = { id: doc.id, ...doc.data() };
@@ -1130,6 +1165,80 @@
         document.getElementById('loanParcela').textContent = formatBRL(parcela);
         document.getElementById('loanJuros').textContent = formatBRL(totalJuros);
         document.getElementById('loanTotal').textContent = formatBRL(totalPago);
+    }
+
+    /* ---------- SEARCH ---------- */
+    function setupSearch() {
+        const input = document.querySelector('.search-bar input');
+        if (!input) return;
+        input.addEventListener('input', function() {
+            const q = this.value.toLowerCase().trim();
+            const active = document.querySelector('.page.active');
+            if (!active) return;
+            const rows = active.querySelectorAll('tbody tr');
+            rows.forEach(tr => {
+                const text = tr.textContent.toLowerCase();
+                tr.style.display = (!q || text.includes(q)) ? '' : 'none';
+            });
+            if (!q) return;
+            const containers = active.querySelectorAll('[id$="Container"], [id$="container"]');
+            containers.forEach(c => {
+                const cards = c.querySelectorAll('.card');
+                cards.forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    card.style.display = text.includes(q) ? '' : 'none';
+                });
+            });
+        });
+    }
+
+    /* ---------- NOTIFICATIONS ---------- */
+    function setupNotifications() {
+        const btn = document.querySelector('.notification-btn');
+        const popup = document.getElementById('notifPopup');
+        if (!btn || !popup) return;
+
+        btn.addEventListener('click', async function(e) {
+            e.stopPropagation();
+            if (popup.classList.contains('open')) {
+                popup.classList.remove('open');
+                return;
+            }
+            await updateNotifications();
+            popup.classList.add('open');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (popup.classList.contains('open') && !popup.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+                popup.classList.remove('open');
+            }
+        });
+    }
+
+    async function updateNotifications() {
+        const list = document.getElementById('notifList');
+        const countEl = document.getElementById('notifCount');
+        if (!list) return;
+        const transactions = await loadTransactions();
+        const now = new Date();
+        const items = [];
+        transactions.forEach(t => {
+            const d = new Date(t.data + (t.data.includes('T') ? '' : 'T12:00:00'));
+            const diffDays = Math.ceil((d - now) / (1000 * 60 * 60 * 24));
+            const st = t.status || 'Confirmado';
+            if (st === 'Pendente' && diffDays < 0) {
+                items.push({ icon: 'fa-triangle-exclamation', color: 'var(--error)', text: t.descricao + ' (' + (t.tipo === 'despesa' ? 'Despesa' : 'Receita') + ')', small: 'Vencida em ' + formatDate(t.data) });
+            } else if (st === 'Pendente' && diffDays >= 0 && diffDays <= 7) {
+                items.push({ icon: 'fa-clock', color: 'var(--warning)', text: t.descricao + ' (' + (t.tipo === 'despesa' ? 'Despesa' : 'Receita') + ')', small: 'Vence em ' + formatDate(t.data) + ' (' + (diffDays === 0 ? 'hoje' : diffDays + ' dias') + ')' });
+            } else if (t.recorrencia === 'Mensal' && diffDays >= 0 && diffDays <= 3) {
+                items.push({ icon: 'fa-arrows-rotate', color: 'var(--accent)', text: t.descricao + ' (' + (t.tipo === 'despesa' ? 'Despesa' : 'Receita') + ')', small: 'Recorrência em ' + formatDate(t.data) });
+            }
+        });
+        items.sort((a, b) => a.small.localeCompare(b.small));
+        countEl.textContent = items.length;
+        list.innerHTML = items.length ? items.map(i =>
+            '<div class="notif-item"><div class="notif-icon"><i class="fa-solid ' + i.icon + '" style="color:' + i.color + '"></i></div><div class="notif-text">' + i.text + '<small>' + i.small + '</small></div></div>'
+        ).join('') : '<div class="notif-empty">Nenhuma notificação</div>';
     }
 
     /* ---------- INIT ---------- */
