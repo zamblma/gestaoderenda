@@ -545,7 +545,7 @@
                         <div class="table-container">
                             <table>
                                 <thead>
-                                    <tr><th>Fonte</th><th>Categoria</th><th>Data</th><th>Recorrência</th><th>Valor</th></tr>
+                                    <tr><th>Fonte</th><th>Categoria</th><th>Data</th><th>Recorrência</th><th>Status</th><th>Valor</th><th>Ações</th></tr>
                                 </thead>
                                 <tbody id="incomeTableBody">
                                 </tbody>
@@ -593,7 +593,7 @@
                         <div class="table-container">
                             <table>
                                 <thead>
-                                    <tr><th>Descrição</th><th>Categoria</th><th>Data</th><th>Forma de Pagamento</th><th>Valor</th></tr>
+                                    <tr><th>Descrição</th><th>Categoria</th><th>Data</th><th>Recorrência</th><th>Status</th><th>Valor</th><th>Ações</th></tr>
                                 </thead>
                                 <tbody id="expenseTableBody">
                                 </tbody>
@@ -1128,6 +1128,13 @@
                 <option value="Anual">Anual</option>
             </select>
         </div>
+        <div class="form-group">
+            <label>Status</label>
+            <select class="form-control" id="tStatus">
+                <option value="Pendente">Pendente</option>
+                <option value="Confirmado">Confirmado</option>
+            </select>
+        </div>
         <div style="display: flex; gap: 12px; margin-top: 8px;">
             <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeTransactionModal()">Cancelar</button>
             <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveTransaction()"><i class="fa-solid fa-check"></i> Salvar</button>
@@ -1603,11 +1610,14 @@
         recentBody.innerHTML = '';
         transactions.slice(0, 10).forEach(t => {
             const isIncome = t.tipo === 'receita';
+            const st = t.status || 'Confirmado';
+            const stClass = st === 'Confirmado' ? 'status-success' : 'status-warning';
+            const stIcon = st === 'Confirmado' ? 'fa-check' : 'fa-clock';
             const row = document.createElement('tr');
             row.innerHTML = '<td><i class="fa-solid fa-' + (isIncome ? 'arrow-trend-up' : 'arrow-trend-down') + '" style="color: ' + (isIncome ? 'var(--success)' : 'var(--error)') + '; margin-right: 8px;"></i>' + (t.descricao || '') + '</td>' +
                 '<td><span class="tag">' + (t.categoria || '') + '</span></td>' +
                 '<td>' + formatDate(t.data) + '</td>' +
-                '<td><span class="status-badge status-success"><i class="fa-solid fa-check"></i> Confirmado</span></td>' +
+                '<td><span class="status-badge ' + stClass + '"><i class="fa-solid ' + stIcon + '"></i> ' + st + '</span></td>' +
                 '<td style="color: ' + (isIncome ? 'var(--success)' : 'var(--error)') + '; font-weight: 600;">' + (isIncome ? '+ ' : '- ') + formatBRL(parseFloat(t.valor) || 0) + '</td>';
             recentBody.appendChild(row);
         });
@@ -1685,8 +1695,14 @@
         const tbody = document.getElementById('incomeTableBody');
         tbody.innerHTML = '';
         monthTxs.forEach(t => {
+            const st = t.status || 'Confirmado';
+            const stClass = st === 'Confirmado' ? 'status-success' : 'status-warning';
             const tr = document.createElement('tr');
-            tr.innerHTML = '<td>' + (t.descricao || '') + '</td><td><span class="tag">' + (t.categoria || '') + '</span></td><td>' + formatDate(t.data) + '</td><td>' + (t.recorrencia || 'Única') + '</td><td style="color: var(--success); font-weight: 600;">' + formatBRL(parseFloat(t.valor) || 0) + '</td>';
+            tr.innerHTML = '<td>' + (t.descricao || '') + '</td><td><span class="tag">' + (t.categoria || '') + '</span></td><td>' + formatDate(t.data) + '</td><td>' + (t.recorrencia || 'Única') + '</td>' +
+                '<td><span class="status-badge ' + stClass + '">' + st + '</span></td>' +
+                '<td style="color:var(--success); font-weight:600;">' + formatBRL(parseFloat(t.valor) || 0) + '</td>' +
+                '<td><button class="action-btn" onclick="editTransaction(\'' + t.id + '\')" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>' +
+                '<button class="action-btn" onclick="deleteTransaction(\'' + t.id + '\')" title="Excluir" style="margin-left:8px;"><i class="fa-solid fa-trash-can"></i></button></td>';
             tbody.appendChild(tr);
         });
 
@@ -1735,8 +1751,14 @@
         const tbody = document.getElementById('expenseTableBody');
         tbody.innerHTML = '';
         monthTxs.forEach(t => {
+            const st = t.status || 'Confirmado';
+            const stClass = st === 'Confirmado' ? 'status-success' : 'status-warning';
             const tr = document.createElement('tr');
-            tr.innerHTML = '<td>' + (t.descricao || '') + '</td><td><span class="tag">' + (t.categoria || '') + '</span></td><td>' + formatDate(t.data) + '</td><td>Cartão</td><td style="color: var(--error); font-weight: 600;">' + formatBRL(parseFloat(t.valor) || 0) + '</td>';
+            tr.innerHTML = '<td>' + (t.descricao || '') + '</td><td><span class="tag">' + (t.categoria || '') + '</span></td><td>' + formatDate(t.data) + '</td><td>' + (t.recorrencia || 'Única') + '</td>' +
+                '<td><span class="status-badge ' + stClass + '">' + st + '</span></td>' +
+                '<td style="color:var(--error); font-weight:600;">' + formatBRL(parseFloat(t.valor) || 0) + '</td>' +
+                '<td><button class="action-btn" onclick="editTransaction(\'' + t.id + '\')" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>' +
+                '<button class="action-btn" onclick="deleteTransaction(\'' + t.id + '\')" title="Excluir" style="margin-left:8px;"><i class="fa-solid fa-trash-can"></i></button></td>';
             tbody.appendChild(tr);
         });
 
@@ -2044,15 +2066,16 @@
     }
 
     /* ---------- TRANSACTION MODAL ---------- */
-    function openTransactionModal(type, editId) {
+    function openTransactionModal(type, editId, editData) {
         document.getElementById('transactionModal').classList.add('open');
         document.getElementById('transactionId').value = editId || '';
-        document.getElementById('tDescricao').value = '';
-        document.getElementById('tValor').value = '';
-        document.getElementById('tData').value = new Date().toISOString().split('T')[0];
-        document.getElementById('tCategoria').value = 'Salário';
-        document.getElementById('tRecorrencia').value = 'Única';
-        document.getElementById('transactionModalTitle').textContent = editId ? 'Editar Transação' : (type === 'receita' ? 'Nova Receita' : 'Nova Despesa');
+        document.getElementById('tDescricao').value = editData ? editData.descricao : '';
+        document.getElementById('tValor').value = editData ? editData.valor : '';
+        document.getElementById('tData').value = editData ? editData.data : new Date().toISOString().split('T')[0];
+        document.getElementById('tCategoria').value = editData ? editData.categoria : 'Salário';
+        document.getElementById('tRecorrencia').value = editData ? editData.recorrencia : 'Única';
+        document.getElementById('tStatus').value = editData ? (editData.status || 'Confirmado') : 'Pendente';
+        document.getElementById('transactionModalTitle').textContent = editId ? 'Editar ' + (type === 'receita' ? 'Receita' : 'Despesa') : (type === 'receita' ? 'Nova Receita' : type === 'despesa' ? 'Nova Despesa' : 'Nova Transação');
         if (type) setTransactionType(type, true);
     }
 
@@ -2075,15 +2098,18 @@
         const data = document.getElementById('tData').value;
         const categoria = document.getElementById('tCategoria').value;
         const recorrencia = document.getElementById('tRecorrencia').value;
+        const status = document.getElementById('tStatus').value;
         const tipo = document.querySelector('#typeToggle input:checked').value;
 
         if (!descricao || !valor || !data) { alert('Preencha todos os campos obrigatórios.'); return; }
         try {
+            const payload = { descricao, valor: parseFloat(valor), data, categoria, recorrencia, status, tipo };
             if (id) {
                 const ref = getUserRef();
-                if (ref) await ref.collection('transactions').doc(id).update({ descricao, valor: parseFloat(valor), data, categoria, recorrencia, tipo });
+                if (ref) await ref.collection('transactions').doc(id).update(payload);
             } else {
-                await addTransaction({ descricao, valor: parseFloat(valor), data, categoria, recorrencia, tipo, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                await addTransaction(payload);
             }
             closeTransactionModal();
             for (let k in renderedPages) delete renderedPages[k];
@@ -2234,6 +2260,18 @@
     document.getElementById('debtModal').addEventListener('click', function(e) {
         if (e.target === this) closeDebtModal();
     });
+
+    /* ---------- EDIT ---------- */
+    async function editTransaction(id) {
+        const ref = getUserRef();
+        if (!ref) return;
+        try {
+            const doc = await ref.collection('transactions').doc(id).get();
+            if (!doc.exists) return;
+            const t = { id: doc.id, ...doc.data() };
+            openTransactionModal(t.tipo, t.id, t);
+        } catch (e) { alert('Erro ao carregar transação: ' + e.message); }
+    }
 
     /* ---------- DELETE ---------- */
     async function deleteTransaction(id) {
