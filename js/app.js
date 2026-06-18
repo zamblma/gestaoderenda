@@ -462,6 +462,7 @@
             const d = new Date(t.data + (t.data.includes('T') ? '' : 'T12:00:00'));
             return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
         });
+        const allTxs = transactions.filter(t => t.tipo === 'receita');
         const monthConfirmed = monthTxs.filter(t => (t.status || 'Confirmado') === 'Confirmado');
         const total = monthConfirmed.reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
         const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
@@ -486,7 +487,7 @@
 
         const tbody = document.getElementById('incomeTableBody');
         tbody.innerHTML = '';
-        monthTxs.forEach(t => {
+        allTxs.forEach(t => {
             const st = t.status || 'Confirmado';
             const stClass = st === 'Confirmado' ? 'status-success' : 'status-warning';
             const tr = document.createElement('tr');
@@ -519,6 +520,7 @@
             const d = new Date(t.data + (t.data.includes('T') ? '' : 'T12:00:00'));
             return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
         });
+        const allTxs = transactions.filter(t => t.tipo === 'despesa');
         const monthConfirmed = monthTxs.filter(t => (t.status || 'Confirmado') === 'Confirmado');
         const total = monthConfirmed.reduce((s, t) => s + (parseFloat(t.valor) || 0), 0);
         const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
@@ -543,7 +545,7 @@
 
         const tbody = document.getElementById('expenseTableBody');
         tbody.innerHTML = '';
-        monthTxs.forEach(t => {
+        allTxs.forEach(t => {
             const st = t.status || 'Confirmado';
             const stClass = st === 'Confirmado' ? 'status-success' : 'status-warning';
             const tr = document.createElement('tr');
