@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus | GestÃ£o Financeira Premium</title>
+    <title>Nexus | Gestão Financeira Premium</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,19 +30,19 @@
             <a class="nav-item active" onclick="navigate('dashboard', this)"><i class="fa-solid fa-house"></i> Dashboard</a>
             <a class="nav-item" onclick="navigate('receitas', this)"><i class="fa-solid fa-arrow-trend-up"></i> Receitas</a>
             <a class="nav-item" onclick="navigate('despesas', this)"><i class="fa-solid fa-arrow-trend-down"></i> Despesas</a>
-            <a class="nav-item" onclick="navigate('orcamentos', this)"><i class="fa-solid fa-wallet"></i> OrÃ§amentos</a>
+            <a class="nav-item" onclick="navigate('orcamentos', this)"><i class="fa-solid fa-wallet"></i> Orçamentos</a>
             <a class="nav-item" onclick="navigate('metas', this)"><i class="fa-solid fa-bullseye"></i> Metas</a>
             <a class="nav-item" onclick="navigate('investimentos', this)"><i class="fa-solid fa-chart-pie"></i> Investimentos</a>
-            <a class="nav-item" onclick="navigate('dividas', this)"><i class="fa-solid fa-credit-card"></i> DÃ­vidas</a>
-            <a class="nav-item" onclick="navigate('relatorios', this)"><i class="fa-solid fa-file-invoice"></i> RelatÃ³rios</a>
-            <a class="nav-item" onclick="navigate('calendario', this)"><i class="fa-solid fa-calendar"></i> CalendÃ¡rio</a>
-            <a class="nav-item" onclick="navigate('simulacoes', this)"><i class="fa-solid fa-flask"></i> SimulaÃ§Ãµes</a>
-            <a class="nav-item" onclick="navigate('config', this)"><i class="fa-solid fa-gear"></i> ConfiguraÃ§Ãµes</a>
+            <a class="nav-item" onclick="navigate('dividas', this)"><i class="fa-solid fa-credit-card"></i> Dívidas</a>
+            <a class="nav-item" onclick="navigate('relatorios', this)"><i class="fa-solid fa-file-invoice"></i> Relatórios</a>
+            <a class="nav-item" onclick="navigate('calendario', this)"><i class="fa-solid fa-calendar"></i> Calendário</a>
+            <a class="nav-item" onclick="navigate('simulacoes', this)"><i class="fa-solid fa-flask"></i> Simulações</a>
+            <a class="nav-item" onclick="navigate('config', this)"><i class="fa-solid fa-gear"></i> Configurações</a>
         </nav>
         <div class="sidebar-footer">
             <div class="sidebar-footer-card">
                 <strong><i class="fa-solid fa-star" style="color: var(--accent); margin-right: 6px;"></i>Plano Premium</strong>
-                Acesso completo a simulaÃ§Ãµes financeiras.
+                Acesso completo a simulações financeiras.
             </div>
         </div>
     </aside>
@@ -51,7 +51,7 @@
         <header class="topbar">
             <div class="search-bar">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Pesquisar transaÃ§Ãµes, categorias...">
+                <input type="text" placeholder="Pesquisar transações, categorias...">
             </div>
             <div class="top-actions">
                 <button class="notification-btn">
@@ -85,55 +85,55 @@
             <div id="dashboard" class="page active">
                 <div class="header-actions">
                     <div>
-                        <h1>VisÃ£o Geral</h1>
+                        <h1>Visão Geral</h1>
                         <p class="subtitle">Seu resumo financeiro atualizado hoje.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="openTransactionModal()"><i class="fa-solid fa-plus"></i> Nova TransaÃ§Ã£o</button>
+                    <button class="btn btn-primary" onclick="openTransactionModal()"><i class="fa-solid fa-plus"></i> Nova Transação</button>
                 </div>
 
                 <div class="grid-4">
                     <div class="card">
                         <div class="kpi-title">Saldo Atual</div>
                         <div class="kpi-value" id="kpiSaldoVal">R$ 14.850,00</div>
-                        <div class="kpi-trend trend-up" id="kpiSaldoTrend"><i class="fa-solid fa-arrow-up"></i> +5.2% vs Ãºltimo mÃªs</div>
+                        <div class="kpi-trend trend-up" id="kpiSaldoTrend"><i class="fa-solid fa-arrow-up"></i> +5.2% vs último mês</div>
                     </div>
                     <div class="card">
                         <div class="kpi-title">Receita Mensal</div>
                         <div class="kpi-value" id="kpiReceitaVal">R$ 22.400,00</div>
-                        <div class="kpi-trend trend-up" id="kpiReceitaTrend"><i class="fa-solid fa-arrow-up"></i> +12.0% vs Ãºltimo mÃªs</div>
+                        <div class="kpi-trend trend-up" id="kpiReceitaTrend"><i class="fa-solid fa-arrow-up"></i> +12.0% vs último mês</div>
                     </div>
                     <div class="card">
                         <div class="kpi-title">Despesas Mensais</div>
                         <div class="kpi-value" id="kpiDespesaVal">R$ 8.320,50</div>
-                        <div class="kpi-trend trend-down" id="kpiDespesaTrend"><i class="fa-solid fa-arrow-down"></i> -3.1% vs Ãºltimo mÃªs</div>
+                        <div class="kpi-trend trend-down" id="kpiDespesaTrend"><i class="fa-solid fa-arrow-down"></i> -3.1% vs último mês</div>
                     </div>
                     <div class="card">
                         <div class="kpi-title">Economia Mensal</div>
                         <div class="kpi-value" id="kpiEconomiaVal">R$ 14.079,50</div>
-                        <div class="kpi-trend trend-up" id="kpiEconomiaTrend"><i class="fa-solid fa-arrow-up"></i> 62.8% taxa de poupanÃ§a</div>
+                        <div class="kpi-trend trend-up" id="kpiEconomiaTrend"><i class="fa-solid fa-arrow-up"></i> 62.8% taxa de poupança</div>
                     </div>
                 </div>
 
                 <div class="grid-60-40">
                     <div class="card">
                         <h2>Fluxo de Caixa</h2>
-                        <p class="subtitle" style="margin-bottom: 16px;">Receitas e despesas dos Ãºltimos 6 meses</p>
+                        <p class="subtitle" style="margin-bottom: 16px;">Receitas e despesas dos últimos 6 meses</p>
                         <canvas id="cashFlowChart" height="220"></canvas>
                     </div>
                     <div class="card">
                         <h2>Despesas por Categoria</h2>
-                        <p class="subtitle" style="margin-bottom: 16px;">DistribuiÃ§Ã£o do mÃªs atual</p>
+                        <p class="subtitle" style="margin-bottom: 16px;">Distribuição do mês atual</p>
                         <canvas id="expenseCategoryChart" height="220"></canvas>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2>TransaÃ§Ãµes Recentes</h2>
+                    <h2>Transações Recentes</h2>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>DescriÃ§Ã£o</th>
+                                    <th>Descrição</th>
                                     <th>Categoria</th>
                                     <th>Data</th>
                                     <th>Status</th>
@@ -159,29 +159,29 @@
 
                 <div class="grid-3">
                     <div class="card">
-                        <div class="kpi-title">Total do MÃªs</div>
+                        <div class="kpi-title">Total do Mês</div>
                         <div class="kpi-value" id="kpiReceitaTotalVal">R$ 22.400,00</div>
-                        <div class="kpi-trend trend-up" id="kpiReceitaTotalTrend"><i class="fa-solid fa-arrow-up"></i> +12.0% vs Ãºltimo mÃªs</div>
+                        <div class="kpi-trend trend-up" id="kpiReceitaTotalTrend"><i class="fa-solid fa-arrow-up"></i> +12.0% vs último mês</div>
                     </div>
                     <div class="card">
                         <div class="kpi-title">Maior Fonte</div>
-                        <div class="kpi-value" id="kpiMaiorFonteVal">SalÃ¡rio</div>
+                        <div class="kpi-value" id="kpiMaiorFonteVal">Salário</div>
                         <div class="kpi-trend" id="kpiMaiorFonteTrend" style="color: var(--text-sec);">80.4% da receita total</div>
                     </div>
                     <div class="card">
-                        <div class="kpi-title">MÃ©dia DiÃ¡ria</div>
+                        <div class="kpi-title">Média Diária</div>
                         <div class="kpi-value" id="kpiMediaDiariaVal">R$ 746,67</div>
-                        <div class="kpi-trend trend-up" id="kpiMediaDiariaTrend"><i class="fa-solid fa-arrow-up"></i> +8.1% vs Ãºltimo mÃªs</div>
+                        <div class="kpi-trend trend-up" id="kpiMediaDiariaTrend"><i class="fa-solid fa-arrow-up"></i> +8.1% vs último mês</div>
                     </div>
                 </div>
 
                 <div class="grid-60-40">
                     <div class="card">
-                        <h2>HistÃ³rico de Receitas</h2>
+                        <h2>Histórico de Receitas</h2>
                         <div class="table-container">
                             <table>
                                 <thead>
-                                    <tr><th>Fonte</th><th>Categoria</th><th>Data</th><th>RecorrÃªncia</th><th>Status</th><th>Valor</th><th>AÃ§Ãµes</th></tr>
+                                    <tr><th>Fonte</th><th>Categoria</th><th>Data</th><th>Recorrência</th><th>Status</th><th>Valor</th><th>Ações</th></tr>
                                 </thead>
                                 <tbody id="incomeTableBody">
                                 </tbody>
@@ -200,16 +200,16 @@
                 <div class="header-actions">
                     <div>
                         <h1>Despesas</h1>
-                        <p class="subtitle">Veja para onde seu dinheiro estÃ¡ indo.</p>
+                        <p class="subtitle">Veja para onde seu dinheiro está indo.</p>
                     </div>
                     <button class="btn btn-primary" onclick="openTransactionModal('despesa')"><i class="fa-solid fa-plus"></i> Nova Despesa</button>
                 </div>
 
                 <div class="grid-3">
                     <div class="card">
-                        <div class="kpi-title">Total Gasto no MÃªs</div>
+                        <div class="kpi-title">Total Gasto no Mês</div>
                         <div class="kpi-value" id="kpiDespesaTotalVal">R$ 8.320,50</div>
-                        <div class="kpi-trend trend-down" id="kpiDespesaTotalTrend"><i class="fa-solid fa-arrow-down"></i> -3.1% vs Ãºltimo mÃªs</div>
+                        <div class="kpi-trend trend-down" id="kpiDespesaTotalTrend"><i class="fa-solid fa-arrow-down"></i> -3.1% vs último mês</div>
                     </div>
                     <div class="card">
                         <div class="kpi-title">Categoria que Mais Pesa</div>
@@ -217,19 +217,19 @@
                         <div class="kpi-trend" id="kpiMaiorCategoriaTrend" style="color: var(--text-sec);">28.8% das despesas</div>
                     </div>
                     <div class="card">
-                        <div class="kpi-title">Gasto MÃ©dio DiÃ¡rio</div>
+                        <div class="kpi-title">Gasto Médio Diário</div>
                         <div class="kpi-value" id="kpiGastoMedioVal">R$ 277,35</div>
-                        <div class="kpi-trend trend-up" id="kpiGastoMedioTrend"><i class="fa-solid fa-arrow-up"></i> +1.4% vs Ãºltimo mÃªs</div>
+                        <div class="kpi-trend trend-up" id="kpiGastoMedioTrend"><i class="fa-solid fa-arrow-up"></i> +1.4% vs último mês</div>
                     </div>
                 </div>
 
                 <div class="grid-60-40">
                     <div class="card">
-                        <h2>HistÃ³rico de Despesas</h2>
+                        <h2>Histórico de Despesas</h2>
                         <div class="table-container">
                             <table>
                                 <thead>
-                                    <tr><th>DescriÃ§Ã£o</th><th>Categoria</th><th>Data</th><th>RecorrÃªncia</th><th>Status</th><th>Valor</th><th>AÃ§Ãµes</th></tr>
+                                    <tr><th>Descrição</th><th>Categoria</th><th>Data</th><th>Recorrência</th><th>Status</th><th>Valor</th><th>Ações</th></tr>
                                 </thead>
                                 <tbody id="expenseTableBody">
                                 </tbody>
@@ -243,14 +243,14 @@
                 </div>
             </div>
 
-            <!-- ORÃ‡AMENTOS -->
+            <!-- ORÇAMENTOS -->
             <div id="orcamentos" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>OrÃ§amentos</h1>
+                        <h1>Orçamentos</h1>
                         <p class="subtitle">Defina limites e acompanhe seus gastos por categoria.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="openBudgetModal()"><i class="fa-solid fa-plus"></i> Novo OrÃ§amento</button>
+                    <button class="btn btn-primary" onclick="openBudgetModal()"><i class="fa-solid fa-plus"></i> Novo Orçamento</button>
                 </div>
 
                 <div class="grid-3" id="budgetsContainer">
@@ -276,7 +276,7 @@
                 <div class="header-actions">
                     <div>
                         <h1>Investimentos</h1>
-                        <p class="subtitle">Sua carteira consolidada em um sÃ³ lugar.</p>
+                        <p class="subtitle">Sua carteira consolidada em um só lugar.</p>
                     </div>
                     <button class="btn btn-primary" onclick="openInvestmentModal()"><i class="fa-solid fa-plus"></i> Adicionar Ativo</button>
                     <button class="btn btn-outline"><i class="fa-solid fa-arrow-up-right-from-square"></i> Exportar carteira</button>
@@ -284,9 +284,9 @@
 
                 <div class="grid-4">
                     <div class="card">
-                        <div class="kpi-title">PatrimÃ´nio Total</div>
+                        <div class="kpi-title">Patrimônio Total</div>
                         <div class="kpi-value" id="kpiPatrimonioVal">R$ 187.420,00</div>
-                        <div class="kpi-trend trend-up" id="kpiPatrimonioTrend"><i class="fa-solid fa-arrow-up"></i> +3.4% no mÃªs</div>
+                        <div class="kpi-trend trend-up" id="kpiPatrimonioTrend"><i class="fa-solid fa-arrow-up"></i> +3.4% no mês</div>
                     </div>
                     <div class="card">
                         <div class="kpi-title">Rentabilidade no Ano</div>
@@ -294,14 +294,14 @@
                         <div class="kpi-trend trend-up" id="kpiRentabilidadeTrend"><i class="fa-solid fa-arrow-up"></i> acima do CDI</div>
                     </div>
                     <div class="card">
-                        <div class="kpi-title">Aportes no MÃªs</div>
+                        <div class="kpi-title">Aportes no Mês</div>
                         <div class="kpi-value" id="kpiAportesVal">R$ 4.200,00</div>
-                        <div class="kpi-trend" id="kpiAportesTrend" style="color: var(--text-sec);">automÃ¡tico todo dia 25</div>
+                        <div class="kpi-trend" id="kpiAportesTrend" style="color: var(--text-sec);">automático todo dia 25</div>
                     </div>
                     <div class="card">
                         <div class="kpi-title">Dividendos Recebidos</div>
                         <div class="kpi-value" id="kpiDividendosVal">R$ 680,00</div>
-                        <div class="kpi-trend trend-up" id="kpiDividendosTrend"><i class="fa-solid fa-arrow-up"></i> +9.6% vs Ãºltimo mÃªs</div>
+                        <div class="kpi-trend trend-up" id="kpiDividendosTrend"><i class="fa-solid fa-arrow-up"></i> +9.6% vs último mês</div>
                     </div>
                 </div>
 
@@ -317,27 +317,27 @@
                         </div>
                     </div>
                     <div class="card">
-                        <h2>AlocaÃ§Ã£o da Carteira</h2>
+                        <h2>Alocação da Carteira</h2>
                         <canvas id="investmentAllocationChart" height="240"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- DÃVIDAS -->
+            <!-- DÍVIDAS -->
             <div id="dividas" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>DÃ­vidas</h1>
+                        <h1>Dívidas</h1>
                         <p class="subtitle">Controle seus financiamentos e parcelamentos.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="openDebtModal()"><i class="fa-solid fa-plus"></i> Adicionar DÃ­vida</button>
+                    <button class="btn btn-primary" onclick="openDebtModal()"><i class="fa-solid fa-plus"></i> Adicionar Dívida</button>
                 </div>
 
                 <div class="grid-3">
                     <div class="card">
                         <div class="kpi-title">Total em Aberto</div>
                         <div class="kpi-value" id="kpiDividaTotalVal">R$ 64.380,00</div>
-                        <div class="kpi-trend trend-down" id="kpiDividaTotalTrend"><i class="fa-solid fa-arrow-down"></i> -4.2% vs Ãºltimo mÃªs</div>
+                        <div class="kpi-trend trend-down" id="kpiDividaTotalTrend"><i class="fa-solid fa-arrow-down"></i> -4.2% vs último mês</div>
                     </div>
                     <div class="card">
                         <div class="kpi-title">Pagamento Mensal Total</div>
@@ -345,17 +345,17 @@
                         <div class="kpi-trend" id="kpiPagamentoMensalTrend" style="color: var(--text-sec);">comprometendo 14.2% da renda</div>
                     </div>
                     <div class="card">
-                        <div class="kpi-title">PrevisÃ£o de QuitaÃ§Ã£o</div>
+                        <div class="kpi-title">Previsão de Quitação</div>
                         <div class="kpi-value" id="kpiPrevisaoQuitacaoVal">22 meses</div>
                         <div class="kpi-trend" id="kpiPrevisaoQuitacaoTrend" style="color: var(--text-sec);">mantendo o ritmo atual</div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2>DÃ­vidas Ativas</h2>
+                    <h2>Dívidas Ativas</h2>
                     <div class="table-container">
                         <table>
-                            <thead><tr><th>DÃ­vida</th><th>Saldo Devedor</th><th>Taxa de Juros</th><th>Parcela Mensal</th><th>Progresso</th></tr></thead>
+                            <thead><tr><th>Dívida</th><th>Saldo Devedor</th><th>Taxa de Juros</th><th>Parcela Mensal</th><th>Progresso</th></tr></thead>
                             <tbody id="debtsTableBody">
                             </tbody>
                         </table>
@@ -363,12 +363,12 @@
                 </div>
             </div>
 
-            <!-- RELATÃ“RIOS -->
+            <!-- RELATÓRIOS -->
             <div id="relatorios" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>RelatÃ³rios</h1>
-                        <p class="subtitle">Gere relatÃ³rios detalhados da sua vida financeira.</p>
+                        <h1>Relatórios</h1>
+                        <p class="subtitle">Gere relatórios detalhados da sua vida financeira.</p>
                     </div>
                 </div>
 
@@ -379,38 +379,38 @@
                             <h2 style="margin-bottom: 4px;">Resumo Mensal</h2>
                             <p class="subtitle" style="margin: 0;">Receitas, despesas e economia de junho de 2026.</p>
                         </div>
-                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatÃ³rio</button>
+                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatório</button>
                     </div>
                     <div class="card report-type-card">
                         <div class="report-icon" style="background: rgba(129,140,248,0.1); color: var(--purple);"><i class="fa-solid fa-chart-line"></i></div>
                         <div>
-                            <h2 style="margin-bottom: 4px;">RelatÃ³rio Anual</h2>
+                            <h2 style="margin-bottom: 4px;">Relatório Anual</h2>
                             <p class="subtitle" style="margin: 0;">Consolidado completo do ano de 2026.</p>
                         </div>
-                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatÃ³rio</button>
+                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatório</button>
                     </div>
                     <div class="card report-type-card">
                         <div class="report-icon" style="background: rgba(34,197,94,0.1); color: var(--success);"><i class="fa-solid fa-file-invoice-dollar"></i></div>
                         <div>
-                            <h2 style="margin-bottom: 4px;">DeclaraÃ§Ã£o de IR</h2>
+                            <h2 style="margin-bottom: 4px;">Declaração de IR</h2>
                             <p class="subtitle" style="margin: 0;">Organize bens, rendas e investimentos.</p>
                         </div>
-                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatÃ³rio</button>
+                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatório</button>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2>Receitas vs Despesas â€” Ãºltimos 6 meses</h2>
+                    <h2>Receitas vs Despesas — últimos 6 meses</h2>
                     <canvas id="reportsSummaryChart" height="260"></canvas>
                 </div>
             </div>
 
-            <!-- CALENDÃRIO -->
+            <!-- CALENDÁRIO -->
             <div id="calendario" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>CalendÃ¡rio Financeiro</h1>
-                        <p class="subtitle">Junho de 2026 â€” vencimentos, recebimentos e aportes.</p>
+                        <h1>Calendário Financeiro</h1>
+                        <p class="subtitle">Junho de 2026 — vencimentos, recebimentos e aportes.</p>
                     </div>
                 </div>
                 <div class="card">
@@ -424,12 +424,12 @@
                 </div>
             </div>
 
-            <!-- SIMULAÃ‡Ã•ES -->
+            <!-- SIMULAÇÕES -->
             <div id="simulacoes" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>SimulaÃ§Ãµes</h1>
-                        <p class="subtitle">Projete cenÃ¡rios antes de tomar decisÃµes financeiras.</p>
+                        <h1>Simulações</h1>
+                        <p class="subtitle">Projete cenários antes de tomar decisões financeiras.</p>
                     </div>
                 </div>
 
@@ -441,40 +441,40 @@
                             <div class="form-group"><label>Aporte mensal (R$)</label><input type="number" class="form-control" id="simAporte" value="500"></div>
                             <div class="form-group"><label>Taxa de juros anual (%)</label><input type="number" class="form-control" id="simTaxa" value="10"></div>
                         </div>
-                        <div class="form-group"><label>PerÃ­odo (meses)</label><input type="number" class="form-control" id="simMeses" value="60"></div>
+                        <div class="form-group"><label>Período (meses)</label><input type="number" class="form-control" id="simMeses" value="60"></div>
                         <button class="btn btn-primary" onclick="calcularJurosCompostos()" style="width: 100%; justify-content: center;"><i class="fa-solid fa-calculator"></i> Calcular</button>
                         <div class="sim-result-grid">
-                            <div class="sim-result-box"><div class="label">Total Investido</div><div class="value" id="simInvestido" style="color: var(--text-main);">â€”</div></div>
-                            <div class="sim-result-box"><div class="label">Total em Juros</div><div class="value" id="simJuros" style="color: var(--success);">â€”</div></div>
-                            <div class="sim-result-box"><div class="label">Valor Final</div><div class="value" id="simFinal" style="color: var(--accent);">â€”</div></div>
+                            <div class="sim-result-box"><div class="label">Total Investido</div><div class="value" id="simInvestido" style="color: var(--text-main);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Total em Juros</div><div class="value" id="simJuros" style="color: var(--success);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Valor Final</div><div class="value" id="simFinal" style="color: var(--accent);">—</div></div>
                         </div>
                         <canvas id="simChart" height="180" style="margin-top: 20px;"></canvas>
                     </div>
 
                     <div class="card">
-                        <h2><i class="fa-solid fa-hand-holding-dollar" style="color: var(--purple); margin-right: 8px;"></i>Simulador de EmprÃ©stimo</h2>
-                        <div class="form-group"><label>Valor do emprÃ©stimo (R$)</label><input type="number" class="form-control" id="loanValor" value="20000"></div>
+                        <h2><i class="fa-solid fa-hand-holding-dollar" style="color: var(--purple); margin-right: 8px;"></i>Simulador de Empréstimo</h2>
+                        <div class="form-group"><label>Valor do empréstimo (R$)</label><input type="number" class="form-control" id="loanValor" value="20000"></div>
                         <div class="form-row">
                             <div class="form-group"><label>Taxa de juros mensal (%)</label><input type="number" class="form-control" id="loanTaxa" value="1.8" step="0.1"></div>
-                            <div class="form-group"><label>NÃºmero de parcelas</label><input type="number" class="form-control" id="loanParcelas" value="24"></div>
+                            <div class="form-group"><label>Número de parcelas</label><input type="number" class="form-control" id="loanParcelas" value="24"></div>
                         </div>
                         <button class="btn btn-primary" onclick="calcularEmprestimo()" style="width: 100%; justify-content: center;"><i class="fa-solid fa-calculator"></i> Calcular</button>
                         <div class="sim-result-grid">
-                            <div class="sim-result-box"><div class="label">Parcela Mensal</div><div class="value" id="loanParcela" style="color: var(--text-main);">â€”</div></div>
-                            <div class="sim-result-box"><div class="label">Total de Juros</div><div class="value" id="loanJuros" style="color: var(--error);">â€”</div></div>
-                            <div class="sim-result-box"><div class="label">Total Pago</div><div class="value" id="loanTotal" style="color: var(--purple);">â€”</div></div>
+                            <div class="sim-result-box"><div class="label">Parcela Mensal</div><div class="value" id="loanParcela" style="color: var(--text-main);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Total de Juros</div><div class="value" id="loanJuros" style="color: var(--error);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Total Pago</div><div class="value" id="loanTotal" style="color: var(--purple);">—</div></div>
                         </div>
-                        <p class="subtitle" style="margin-top: 24px; margin-bottom: 0;">SimulaÃ§Ã£o ilustrativa. CondiÃ§Ãµes reais dependem da instituiÃ§Ã£o financeira.</p>
+                        <p class="subtitle" style="margin-top: 24px; margin-bottom: 0;">Simulação ilustrativa. Condições reais dependem da instituição financeira.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- CONFIGURAÃ‡Ã•ES -->
+            <!-- CONFIGURAÇÕES -->
             <div id="config" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>ConfiguraÃ§Ãµes</h1>
-                        <p class="subtitle">Gerencie seu perfil, preferÃªncias e seguranÃ§a.</p>
+                        <h1>Configurações</h1>
+                        <p class="subtitle">Gerencie seu perfil, preferências e segurança.</p>
                     </div>
                 </div>
 
@@ -485,7 +485,7 @@
                             <div class="settings-avatar" id="configAvatar">AF</div>
                             <div>
                                 <button class="btn btn-outline" style="margin-bottom: 4px;">Alterar foto</button>
-                                <p class="subtitle" style="margin: 4px 0 0;">JPG ou PNG, atÃ© 2MB.</p>
+                                <p class="subtitle" style="margin: 4px 0 0;">JPG ou PNG, até 2MB.</p>
                             </div>
                         </div>
                         <div class="form-row">
@@ -493,31 +493,31 @@
                             <div class="form-group"><label>E-mail</label><input type="email" class="form-control" id="configEmail" value="alexandre.ferreira@email.com"></div>
                         </div>
                         <div class="form-group"><label>Telefone</label><input type="text" class="form-control" value="(11) 98765-4321"></div>
-                        <button class="btn btn-primary">Salvar alteraÃ§Ãµes</button>
+                        <button class="btn btn-primary">Salvar alterações</button>
                     </div>
 
                     <div class="card">
-                        <h2>PreferÃªncias</h2>
-                        <div class="form-group"><label>Moeda padrÃ£o</label>
+                        <h2>Preferências</h2>
+                        <div class="form-group"><label>Moeda padrão</label>
                             <select class="form-control">
                                 <option>Real Brasileiro (R$)</option>
-                                <option>DÃ³lar Americano (US$)</option>
-                                <option>Euro (â‚¬)</option>
+                                <option>Dólar Americano (US$)</option>
+                                <option>Euro (€)</option>
                             </select>
                         </div>
                         <div class="form-group"><label>Idioma</label>
                             <select class="form-control">
-                                <option>PortuguÃªs (Brasil)</option>
+                                <option>Português (Brasil)</option>
                                 <option>English (US)</option>
-                                <option>EspaÃ±ol</option>
+                                <option>Español</option>
                             </select>
                         </div>
                         <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>Alertas de orÃ§amento</strong><span>Avisar quando atingir 80% do limite</span></div>
+                            <div class="toggle-row-text"><strong>Alertas de orçamento</strong><span>Avisar quando atingir 80% do limite</span></div>
                             <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
                         </div>
                         <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>Resumo semanal por e-mail</strong><span>Receber todo domingo Ã s 8h</span></div>
+                            <div class="toggle-row-text"><strong>Resumo semanal por e-mail</strong><span>Receber todo domingo às 8h</span></div>
                             <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
                         </div>
                         <div class="toggle-row">
@@ -527,14 +527,14 @@
                     </div>
 
                     <div class="card">
-                        <h2>SeguranÃ§a</h2>
-                        <div class="form-group"><label>Senha atual</label><input type="password" class="form-control" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"></div>
+                        <h2>Segurança</h2>
+                        <div class="form-group"><label>Senha atual</label><input type="password" class="form-control" placeholder="••••••••"></div>
                         <div class="form-row">
-                            <div class="form-group"><label>Nova senha</label><input type="password" class="form-control" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"></div>
-                            <div class="form-group"><label>Confirmar nova senha</label><input type="password" class="form-control" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"></div>
+                            <div class="form-group"><label>Nova senha</label><input type="password" class="form-control" placeholder="••••••••"></div>
+                            <div class="form-group"><label>Confirmar nova senha</label><input type="password" class="form-control" placeholder="••••••••"></div>
                         </div>
                         <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>AutenticaÃ§Ã£o em duas etapas</strong><span>ProteÃ§Ã£o extra ao fazer login</span></div>
+                            <div class="toggle-row-text"><strong>Autenticação em duas etapas</strong><span>Proteção extra ao fazer login</span></div>
                             <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
                         </div>
                         <button class="btn btn-primary" style="margin-top: 16px;">Atualizar senha</button>
@@ -554,7 +554,7 @@
                             <span class="status-badge status-success">Ativa</span>
                         </div>
                         <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>ItaÃº</strong><span>Conta corrente conectada</span></div>
+                            <div class="toggle-row-text"><strong>Itaú</strong><span>Conta corrente conectada</span></div>
                             <span class="status-badge status-success">Ativa</span>
                         </div>
                         <div class="toggle-row">
@@ -579,8 +579,8 @@
         </div>
         <input type="hidden" id="goalId">
         <div class="form-group">
-            <label>TÃ­tulo</label>
-            <input type="text" class="form-control" id="goalTitulo" placeholder="Ex: Viagem Ã  Europa">
+            <label>Título</label>
+            <input type="text" class="form-control" id="goalTitulo" placeholder="Ex: Viagem à Europa">
         </div>
         <div class="form-row">
             <div class="form-group">
@@ -597,16 +597,16 @@
             <input type="date" class="form-control" id="goalPrazo">
         </div>
         <div class="form-group">
-            <label>Ãcone</label>
+            <label>Ícone</label>
             <select class="form-control" id="goalIcone">
-                <option value="fa-plane">âœˆï¸ Viagem</option>
-                <option value="fa-shield-halved">ðŸ›¡ï¸ EmergÃªncia</option>
-                <option value="fa-car">ðŸš— Carro</option>
-                <option value="fa-graduation-cap">ðŸŽ“ EducaÃ§Ã£o</option>
-                <option value="fa-laptop">ðŸ’» Tecnologia</option>
-                <option value="fa-house">ðŸ  Casa</option>
-                <option value="fa-gem">ðŸ’Ž Investimento</option>
-                <option value="fa-heart">â¤ï¸ SaÃºde</option>
+                <option value="fa-plane">✈️ Viagem</option>
+                <option value="fa-shield-halved">🛡️ Emergência</option>
+                <option value="fa-car">🚗 Carro</option>
+                <option value="fa-graduation-cap">🎓 Educação</option>
+                <option value="fa-laptop">💻 Tecnologia</option>
+                <option value="fa-house">🏠 Casa</option>
+                <option value="fa-gem">💎 Investimento</option>
+                <option value="fa-heart">❤️ Saúde</option>
             </select>
         </div>
         <div style="display: flex; gap: 12px; margin-top: 8px;">
@@ -616,25 +616,25 @@
     </div>
 </div>
 
-<!-- MODAL: ORÃ‡AMENTO -->
+<!-- MODAL: ORÇAMENTO -->
 <div class="modal-overlay" id="budgetModal">
     <div class="modal">
         <div class="modal-header">
-            <h2>Novo OrÃ§amento</h2>
+            <h2>Novo Orçamento</h2>
             <button class="close-modal" onclick="closeBudgetModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <input type="hidden" id="budgetId">
         <div class="form-group">
             <label>Categoria</label>
             <select class="form-control" id="budgetCategoria">
-                <option value="AlimentaÃ§Ã£o">AlimentaÃ§Ã£o</option>
+                <option value="Alimentação">Alimentação</option>
                 <option value="Moradia">Moradia</option>
                 <option value="Transporte">Transporte</option>
                 <option value="Lazer">Lazer</option>
-                <option value="SaÃºde">SaÃºde</option>
-                <option value="EducaÃ§Ã£o">EducaÃ§Ã£o</option>
+                <option value="Saúde">Saúde</option>
+                <option value="Educação">Educação</option>
                 <option value="Utilidades">Utilidades</option>
-                <option value="CartÃ£o">CartÃ£o</option>
+                <option value="Cartão">Cartão</option>
                 <option value="Outros">Outros</option>
             </select>
         </div>
@@ -665,8 +665,8 @@
             <label>Classe</label>
             <select class="form-control" id="invClasse">
                 <option value="Renda Fixa">Renda Fixa</option>
-                <option value="AÃ§Ãµes">AÃ§Ãµes</option>
-                <option value="Fundos ImobiliÃ¡rios">Fundos ImobiliÃ¡rios</option>
+                <option value="Ações">Ações</option>
+                <option value="Fundos Imobiliários">Fundos Imobiliários</option>
                 <option value="Internacional">Internacional</option>
                 <option value="Cripto">Cripto</option>
             </select>
@@ -682,17 +682,17 @@
     </div>
 </div>
 
-<!-- MODAL: DÃVIDA -->
+<!-- MODAL: DÍVIDA -->
 <div class="modal-overlay" id="debtModal">
     <div class="modal">
         <div class="modal-header">
-            <h2>Nova DÃ­vida</h2>
+            <h2>Nova Dívida</h2>
             <button class="close-modal" onclick="closeDebtModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <input type="hidden" id="debtId">
         <div class="form-group">
-            <label>Nome da DÃ­vida</label>
-            <input type="text" class="form-control" id="debtNome" placeholder="Ex: Financiamento VeÃ­culo">
+            <label>Nome da Dívida</label>
+            <input type="text" class="form-control" id="debtNome" placeholder="Ex: Financiamento Veículo">
         </div>
         <div class="form-row">
             <div class="form-group">
@@ -715,11 +715,11 @@
     </div>
 </div>
 
-<!-- MODAL: NOVA TRANSAÃ‡ÃƒO -->
+<!-- MODAL: NOVA TRANSAÇÃO -->
 <div class="modal-overlay" id="transactionModal">
     <div class="modal">
         <div class="modal-header">
-            <h2 id="transactionModalTitle">Nova TransaÃ§Ã£o</h2>
+            <h2 id="transactionModalTitle">Nova Transação</h2>
             <button class="close-modal" onclick="closeTransactionModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <input type="hidden" id="transactionId">
@@ -728,8 +728,8 @@
             <label onclick="setTransactionType('despesa')"><input type="radio" name="tType" value="despesa"><span><i class="fa-solid fa-arrow-trend-down"></i> Despesa</span></label>
         </div>
         <div class="form-group" style="margin-top: 16px;">
-            <label>DescriÃ§Ã£o</label>
-            <input type="text" class="form-control" id="tDescricao" placeholder="Ex: SalÃ¡rio, Supermercado...">
+            <label>Descrição</label>
+            <input type="text" class="form-control" id="tDescricao" placeholder="Ex: Salário, Supermercado...">
         </div>
         <div class="form-row">
             <div class="form-group">
@@ -744,21 +744,21 @@
         <div class="form-group">
             <label>Categoria</label>
             <select class="form-control" id="tCategoria">
-                <option value="SalÃ¡rio">SalÃ¡rio</option>
+                <option value="Salário">Salário</option>
                 <option value="Freelance">Freelance</option>
                 <option value="Moradia">Moradia</option>
-                <option value="AlimentaÃ§Ã£o">AlimentaÃ§Ã£o</option>
+                <option value="Alimentação">Alimentação</option>
                 <option value="Transporte">Transporte</option>
                 <option value="Lazer">Lazer</option>
-                <option value="SaÃºde">SaÃºde</option>
-                <option value="EducaÃ§Ã£o">EducaÃ§Ã£o</option>
+                <option value="Saúde">Saúde</option>
+                <option value="Educação">Educação</option>
                 <option value="Outros">Outros</option>
             </select>
         </div>
         <div class="form-group">
-            <label>RecorrÃªncia</label>
+            <label>Recorrência</label>
             <select class="form-control" id="tRecorrencia">
-                <option value="Ãšnica">Ãšnica</option>
+                <option value="Única">Única</option>
                 <option value="Mensal">Mensal</option>
                 <option value="Semanal">Semanal</option>
                 <option value="Anual">Anual</option>
@@ -806,7 +806,7 @@
     </div>
 </div>
 
-<!-- MODAL: CONFIRMAR EXCLUSÃƒO PERFIL -->
+<!-- MODAL: CONFIRMAR EXCLUSÃO PERFIL -->
 <div class="modal-overlay" id="confirmModal">
     <div class="modal" style="width:360px;">
         <div class="modal-header">
@@ -827,7 +827,7 @@
         <div style="text-align: center; margin-bottom: 24px;">
             <div style="font-size: 40px; color: var(--accent); margin-bottom: 8px;"><i class="fa-solid fa-infinity"></i></div>
             <h1 style="margin-bottom: 4px;">Nexus</h1>
-            <p class="subtitle" style="margin-top: 0;">GestÃ£o Financeira Premium</p>
+            <p class="subtitle" style="margin-top: 0;">Gestão Financeira Premium</p>
         </div>
 
         <!-- Login Form -->
@@ -838,7 +838,7 @@
             </div>
             <div class="form-group">
                 <label>Senha</label>
-                <input type="password" class="form-control" id="loginPassword" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+                <input type="password" class="form-control" id="loginPassword" placeholder="••••••••">
             </div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
                 <input type="checkbox" id="rememberMe" checked style="accent-color: var(--accent); width: 16px; height: 16px;">
@@ -846,7 +846,7 @@
             </div>
             <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="handleLogin()"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
             <p style="text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-sec);">
-                NÃ£o tem conta? <a href="#" style="color: var(--accent); text-decoration: none;" onclick="showRegister()">Cadastre-se</a>
+                Não tem conta? <a href="#" style="color: var(--accent); text-decoration: none;" onclick="showRegister()">Cadastre-se</a>
             </p>
         </div>
 
@@ -862,11 +862,11 @@
             </div>
             <div class="form-group">
                 <label>Senha</label>
-                <input type="password" class="form-control" id="regPassword" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+                <input type="password" class="form-control" id="regPassword" placeholder="••••••••">
             </div>
             <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="handleRegister()"><i class="fa-solid fa-user-plus"></i> Criar Conta</button>
             <p style="text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-sec);">
-                JÃ¡ tem conta? <a href="#" style="color: var(--accent); text-decoration: none;" onclick="showLogin()">Fazer login</a>
+                Já tem conta? <a href="#" style="color: var(--accent); text-decoration: none;" onclick="showLogin()">Fazer login</a>
             </p>
         </div>
     </div>

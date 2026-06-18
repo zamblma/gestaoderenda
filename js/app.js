@@ -1,4 +1,4 @@
-﻿
+
     /* ---------- FIREBASE CONFIG ---------- */
     const firebaseConfig = {
         apiKey: "AIzaSyBfXsa-oT_gJJjhI42euD5HyBNoc3FHwkI",
@@ -32,7 +32,7 @@
     }
 
     function getMonthName(monthIndex) {
-        const months = ['Janeiro', 'Fevereiro', 'MarÃ§o', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
         return months[monthIndex];
     }
 
@@ -367,9 +367,9 @@
         document.getElementById('kpiDespesaVal').textContent = formatBRL(totalExpense);
         document.getElementById('kpiEconomiaVal').textContent = formatBRL(balance > 0 ? balance : 0);
         document.getElementById('kpiSaldoTrend').innerHTML = (balance >= 0 ? '<i class="fa-solid fa-arrow-up"></i> ' : '<i class="fa-solid fa-arrow-down"></i> ') + 'Saldo ' + (balance >= 0 ? 'positivo' : 'negativo');
-        document.getElementById('kpiReceitaTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> ' + totalIncome.toLocaleString('pt-BR') + ' no mÃªs';
-        document.getElementById('kpiDespesaTrend').innerHTML = '<i class="fa-solid fa-arrow-down"></i> ' + totalExpense.toLocaleString('pt-BR') + ' no mÃªs';
-        document.getElementById('kpiEconomiaTrend').innerHTML = savings.toFixed(1) + '% taxa de poupanÃ§a';
+        document.getElementById('kpiReceitaTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> ' + totalIncome.toLocaleString('pt-BR') + ' no mês';
+        document.getElementById('kpiDespesaTrend').innerHTML = '<i class="fa-solid fa-arrow-down"></i> ' + totalExpense.toLocaleString('pt-BR') + ' no mês';
+        document.getElementById('kpiEconomiaTrend').innerHTML = savings.toFixed(1) + '% taxa de poupança';
 
         const recentBody = document.getElementById('recentTransactionsBody');
         recentBody.innerHTML = '';
@@ -454,9 +454,9 @@
         document.getElementById('kpiReceitaTotalVal').textContent = formatBRL(total);
         document.getElementById('kpiMaiorFonteVal').textContent = biggestSource;
         document.getElementById('kpiMediaDiariaVal').textContent = formatBRL(dailyAvg);
-        document.getElementById('kpiReceitaTotalTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> ' + total.toLocaleString('pt-BR') + ' no mÃªs';
+        document.getElementById('kpiReceitaTotalTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> ' + total.toLocaleString('pt-BR') + ' no mês';
         document.getElementById('kpiMaiorFonteTrend').textContent = (pct > 0 ? pct : 0) + '% da receita total';
-        document.getElementById('kpiMediaDiariaTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> MÃ©dia do mÃªs';
+        document.getElementById('kpiMediaDiariaTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> Média do mês';
 
         const tbody = document.getElementById('incomeTableBody');
         tbody.innerHTML = '';
@@ -464,7 +464,7 @@
             const st = t.status || 'Confirmado';
             const stClass = st === 'Confirmado' ? 'status-success' : 'status-warning';
             const tr = document.createElement('tr');
-            tr.innerHTML = '<td>' + (t.descricao || '') + '</td><td><span class="tag">' + (t.categoria || '') + '</span></td><td>' + formatDate(t.data) + '</td><td>' + (t.recorrencia || 'Ãšnica') + '</td>' +
+            tr.innerHTML = '<td>' + (t.descricao || '') + '</td><td><span class="tag">' + (t.categoria || '') + '</span></td><td>' + formatDate(t.data) + '</td><td>' + (t.recorrencia || 'Única') + '</td>' +
                 '<td><span class="status-badge ' + stClass + '">' + st + '</span></td>' +
                 '<td style="color:var(--success); font-weight:600;">' + formatBRL(parseFloat(t.valor) || 0) + '</td>' +
                 '<td><button class="action-btn" onclick="editTransaction(\'' + t.id + '\')" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>' +
@@ -511,9 +511,9 @@
         document.getElementById('kpiDespesaTotalVal').textContent = formatBRL(total);
         document.getElementById('kpiMaiorCategoriaVal').textContent = biggestCat;
         document.getElementById('kpiGastoMedioVal').textContent = formatBRL(dailyAvg);
-        document.getElementById('kpiDespesaTotalTrend').innerHTML = '<i class="fa-solid fa-arrow-down"></i> ' + total.toLocaleString('pt-BR') + ' no mÃªs';
+        document.getElementById('kpiDespesaTotalTrend').innerHTML = '<i class="fa-solid fa-arrow-down"></i> ' + total.toLocaleString('pt-BR') + ' no mês';
         document.getElementById('kpiMaiorCategoriaTrend').textContent = (pct > 0 ? pct : 0) + '% das despesas';
-        document.getElementById('kpiGastoMedioTrend').innerHTML = '<i class="fa-solid fa-arrow-down"></i> MÃ©dia do mÃªs';
+        document.getElementById('kpiGastoMedioTrend').innerHTML = '<i class="fa-solid fa-arrow-down"></i> Média do mês';
 
         const tbody = document.getElementById('expenseTableBody');
         tbody.innerHTML = '';
@@ -521,7 +521,7 @@
             const st = t.status || 'Confirmado';
             const stClass = st === 'Confirmado' ? 'status-success' : 'status-warning';
             const tr = document.createElement('tr');
-            tr.innerHTML = '<td>' + (t.descricao || '') + '</td><td><span class="tag">' + (t.categoria || '') + '</span></td><td>' + formatDate(t.data) + '</td><td>' + (t.recorrencia || 'Ãšnica') + '</td>' +
+            tr.innerHTML = '<td>' + (t.descricao || '') + '</td><td><span class="tag">' + (t.categoria || '') + '</span></td><td>' + formatDate(t.data) + '</td><td>' + (t.recorrencia || 'Única') + '</td>' +
                 '<td><span class="status-badge ' + stClass + '">' + st + '</span></td>' +
                 '<td style="color:var(--error); font-weight:600;">' + formatBRL(parseFloat(t.valor) || 0) + '</td>' +
                 '<td><button class="action-btn" onclick="editTransaction(\'' + t.id + '\')" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>' +
@@ -568,12 +568,12 @@
                 '<span style="font-weight: 600;"><i class="fa-solid fa-tag" style="color: var(--accent); margin-right: 8px;"></i>' + b.categoria + '</span>' +
                 '<span style="color: var(--text-sec); font-size: 13px;">' + formatBRL(spent) + ' / ' + formatBRL(limit) + '</span></div>' +
                 '<div class="progress-container"><div class="progress-bar" style="width: ' + pct + '%; background: ' + barColor + ';"></div></div>' +
-                '<p class="kpi-trend" style="margin-top: 10px; color: ' + (pct >= 80 ? 'var(--warning)' : 'var(--text-sec)') + ';">' + pct.toFixed(0) + '% utilizado Â· ' + formatBRL(remaining) + ' restantes</p>';
+                '<p class="kpi-trend" style="margin-top: 10px; color: ' + (pct >= 80 ? 'var(--warning)' : 'var(--text-sec)') + ';">' + pct.toFixed(0) + '% utilizado · ' + formatBRL(remaining) + ' restantes</p>';
             container.appendChild(card);
         });
 
         if (!budgets.length) {
-            container.innerHTML = '<div class="card" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-sec);">Nenhum orÃ§amento definido. Clique em "Novo OrÃ§amento" para comeÃ§ar.</div>';
+            container.innerHTML = '<div class="card" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-sec);">Nenhum orçamento definido. Clique em "Novo Orçamento" para começar.</div>';
         }
     }
 
@@ -588,7 +588,7 @@
             const pct = Math.min(100, (current / target) * 100);
             const icon = g.icone || 'fa-bullseye';
             const deadline = g.prazo ? formatDate(g.prazo) : 'Sem prazo';
-            const status = pct >= 100 ? 'ConcluÃ­da' : 'Em dia';
+            const status = pct >= 100 ? 'Concluída' : 'Em dia';
 
             const card = document.createElement('div');
             card.className = 'card goal-card';
@@ -597,7 +597,7 @@
                 '<div><h2 style="margin-bottom: 4px;">' + (g.titulo || 'Meta') + '</h2>' +
                 '<div class="progress-container"><div class="progress-bar" style="width: ' + pct + '%; background: ' + (pct >= 100 ? 'var(--success)' : 'var(--accent)') + ';"></div></div></div>' +
                 '<div class="goal-meta"><span>' + formatBRL(current) + ' de ' + formatBRL(target) + '</span><span>' + pct.toFixed(0) + '%</span></div>' +
-                '<div class="goal-deadline"><i class="fa-regular fa-calendar"></i> ' + (pct >= 100 ? 'ConcluÃ­da' : 'Meta') + ': ' + deadline + '</div>';
+                '<div class="goal-deadline"><i class="fa-regular fa-calendar"></i> ' + (pct >= 100 ? 'Concluída' : 'Meta') + ': ' + deadline + '</div>';
             container.appendChild(card);
         });
 
@@ -622,7 +622,7 @@
         document.getElementById('kpiPatrimonioTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> ' + total.toLocaleString('pt-BR') + ' investidos';
         document.getElementById('kpiRentabilidadeTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> acima do CDI';
         document.getElementById('kpiAportesTrend').textContent = 'total em aportes';
-        document.getElementById('kpiDividendosTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> recebidos no mÃªs';
+        document.getElementById('kpiDividendosTrend').innerHTML = '<i class="fa-solid fa-arrow-up"></i> recebidos no mês';
 
         const tbody = document.getElementById('investmentsTableBody');
         tbody.innerHTML = '';
@@ -667,7 +667,7 @@
 
         document.getElementById('kpiDividaTotalVal').textContent = formatBRL(total);
         document.getElementById('kpiPagamentoMensalVal').textContent = formatBRL(monthlyTotal);
-        document.getElementById('kpiPrevisaoQuitacaoVal').textContent = minMonths > 0 ? minMonths + ' meses' : 'â€”';
+        document.getElementById('kpiPrevisaoQuitacaoVal').textContent = minMonths > 0 ? minMonths + ' meses' : '—';
         document.getElementById('kpiDividaTotalTrend').innerHTML = '<i class="fa-solid fa-arrow-down"></i> ' + total.toLocaleString('pt-BR') + ' em aberto';
         document.getElementById('kpiPagamentoMensalTrend').textContent = 'comprometendo parte da renda';
         document.getElementById('kpiPrevisaoQuitacaoTrend').textContent = 'mantendo o ritmo atual';
@@ -698,12 +698,12 @@
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const monthName = getMonthName(month);
 
-        document.querySelector('#calendario .subtitle').textContent = monthName + ' de ' + year + ' â€” vencimentos, recebimentos e aportes.';
+        document.querySelector('#calendario .subtitle').textContent = monthName + ' de ' + year + ' — vencimentos, recebimentos e aportes.';
 
         const grid = document.getElementById('calendarGrid');
         grid.innerHTML = '';
 
-        const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'SÃ¡b'];
+        const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
         weekdays.forEach(d => {
             const el = document.createElement('div');
             el.className = 'calendar-weekday';
@@ -839,10 +839,10 @@
         document.getElementById('tDescricao').value = editData ? editData.descricao : '';
         document.getElementById('tValor').value = editData ? editData.valor : '';
         document.getElementById('tData').value = editData ? editData.data : new Date().toISOString().split('T')[0];
-        document.getElementById('tCategoria').value = editData ? editData.categoria : 'SalÃ¡rio';
-        document.getElementById('tRecorrencia').value = editData ? editData.recorrencia : 'Ãšnica';
+        document.getElementById('tCategoria').value = editData ? editData.categoria : 'Salário';
+        document.getElementById('tRecorrencia').value = editData ? editData.recorrencia : 'Única';
         document.getElementById('tStatus').value = editData ? (editData.status || 'Confirmado') : 'Pendente';
-        document.getElementById('transactionModalTitle').textContent = editId ? 'Editar ' + (type === 'receita' ? 'Receita' : 'Despesa') : (type === 'receita' ? 'Nova Receita' : type === 'despesa' ? 'Nova Despesa' : 'Nova TransaÃ§Ã£o');
+        document.getElementById('transactionModalTitle').textContent = editId ? 'Editar ' + (type === 'receita' ? 'Receita' : 'Despesa') : (type === 'receita' ? 'Nova Receita' : type === 'despesa' ? 'Nova Despesa' : 'Nova Transação');
         if (type) setTransactionType(type, true);
     }
 
@@ -868,7 +868,7 @@
         const status = document.getElementById('tStatus').value;
         const tipo = document.querySelector('#typeToggle input:checked').value;
 
-        if (!descricao || !valor || !data) { alert('Preencha todos os campos obrigatÃ³rios.'); return; }
+        if (!descricao || !valor || !data) { alert('Preencha todos os campos obrigatórios.'); return; }
         try {
             const payload = { descricao, valor: parseFloat(valor), data, categoria, recorrencia, status, tipo };
             if (id) {
@@ -882,7 +882,7 @@
             for (let k in renderedPages) delete renderedPages[k];
             await loadAllData();
         } catch (e) {
-            alert('Erro ao salvar. Verifique as regras de seguranÃ§a do Firestore.\n\nDetalhes: ' + e.message);
+            alert('Erro ao salvar. Verifique as regras de segurança do Firestore.\n\nDetalhes: ' + e.message);
         }
     }
 
@@ -914,7 +914,7 @@
         const prazo = document.getElementById('goalPrazo').value;
         const icone = document.getElementById('goalIcone').value;
 
-        if (!titulo || !valorAlvo) { alert('Preencha os campos obrigatÃ³rios.'); return; }
+        if (!titulo || !valorAlvo) { alert('Preencha os campos obrigatórios.'); return; }
         try {
             const data = { titulo, valorAlvo: parseFloat(valorAlvo), valorAtual: parseFloat(valorAtual) || 0, prazo, icone };
             if (id) data.id = id;
@@ -933,7 +933,7 @@
     function openBudgetModal(editId) {
         document.getElementById('budgetModal').classList.add('open');
         document.getElementById('budgetId').value = editId || '';
-        document.getElementById('budgetCategoria').value = 'AlimentaÃ§Ã£o';
+        document.getElementById('budgetCategoria').value = 'Alimentação';
         document.getElementById('budgetLimite').value = '';
     }
 
@@ -953,7 +953,7 @@
             closeBudgetModal();
             renderedPages['orcamentos'] = false;
             await renderOrcamentos();
-        } catch (e) { alert('Erro ao salvar orÃ§amento: ' + e.message); }
+        } catch (e) { alert('Erro ao salvar orçamento: ' + e.message); }
     }
 
     document.getElementById('budgetModal').addEventListener('click', function(e) {
@@ -978,7 +978,7 @@
         const nome = document.getElementById('invNome').value;
         const classe = document.getElementById('invClasse').value;
         const valor = document.getElementById('invValor').value;
-        if (!nome || !valor) { alert('Preencha os campos obrigatÃ³rios.'); return; }
+        if (!nome || !valor) { alert('Preencha os campos obrigatórios.'); return; }
         try {
             const data = { nome, classe, valor: parseFloat(valor) };
             if (id) data.id = id;
@@ -1013,7 +1013,7 @@
         const valorTotal = document.getElementById('debtTotal').value;
         const taxaJuros = document.getElementById('debtTaxa').value;
         const pagamentoMensal = document.getElementById('debtMensal').value;
-        if (!nome || !valorTotal) { alert('Preencha os campos obrigatÃ³rios.'); return; }
+        if (!nome || !valorTotal) { alert('Preencha os campos obrigatórios.'); return; }
         try {
             const data = { nome, valorTotal: parseFloat(valorTotal), taxaJuros: parseFloat(taxaJuros) || 0, pagamentoMensal: parseFloat(pagamentoMensal) || 0 };
             if (id) data.id = id;
@@ -1021,7 +1021,7 @@
             closeDebtModal();
             renderedPages['dividas'] = false;
             await renderDividas();
-        } catch (e) { alert('Erro ao salvar dÃ­vida: ' + e.message); }
+        } catch (e) { alert('Erro ao salvar dívida: ' + e.message); }
     }
 
     document.getElementById('debtModal').addEventListener('click', function(e) {
@@ -1037,7 +1037,7 @@
             if (!doc.exists) return;
             const t = { id: doc.id, ...doc.data() };
             openTransactionModal(t.tipo, t.id, t);
-        } catch (e) { alert('Erro ao carregar transaÃ§Ã£o: ' + e.message); }
+        } catch (e) { alert('Erro ao carregar transação: ' + e.message); }
     }
 
     /* ---------- DELETE ---------- */
@@ -1064,7 +1064,7 @@
     }
 
     async function deleteCustomProfile(id) {
-        showConfirm('Excluir o perfil "' + (profiles.find(p => p.id === id)?.nome || '') + '"? Os dados deste perfil serÃ£o perdidos.', async () => {
+        showConfirm('Excluir o perfil "' + (profiles.find(p => p.id === id)?.nome || '') + '"? Os dados deste perfil serão perdidos.', async () => {
             try {
                 await db.collection('users').doc(currentUser.uid).collection('profiles').doc(id).delete();
                 await loadProfiles();
@@ -1095,7 +1095,7 @@
         document.getElementById('simJuros').textContent = formatBRL(juros);
         document.getElementById('simFinal').textContent = formatBRL(saldo);
 
-        const labels = series.map((_, i) => i === 0 ? 'InÃ­cio' : 'MÃªs ' + i);
+        const labels = series.map((_, i) => i === 0 ? 'Início' : 'Mês ' + i);
         const sampledLabels = [];
         const sampledData = [];
         const step = Math.max(1, Math.floor(series.length / 24));
