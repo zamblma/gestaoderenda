@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus | Gestão Financeira Premium</title>
+    <title>Nexus Wealth | Gestão Profissional de Renda & Open Finance</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -21,206 +20,556 @@
 </head>
 <body>
 
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
+
 <div class="app-container">
-    <aside class="sidebar">
-        <div class="logo-area" onclick="navigate('dashboard', document.querySelector('.nav-item'))" style="cursor:pointer;">
-            <i class="fa-solid fa-infinity"></i> Nexus
+    <aside class="sidebar" id="appSidebar">
+        <div class="logo-area" onclick="navigate('dashboard', document.querySelector('.nav-item'))">
+            <div class="logo-mark"><i class="fa-solid fa-infinity"></i></div>
+            <div class="logo-text">
+                <strong>Nexus Wealth</strong>
+                <span>Renda &amp; Open Finance</span>
+            </div>
         </div>
+
         <nav class="nav-menu">
-            <a class="nav-item active" onclick="navigate('dashboard', this)"><i class="fa-solid fa-house"></i> Dashboard</a>
-            <a class="nav-item" onclick="navigate('receitas', this)"><i class="fa-solid fa-arrow-trend-up"></i> Receitas</a>
-            <a class="nav-item" onclick="navigate('despesas', this)"><i class="fa-solid fa-arrow-trend-down"></i> Despesas</a>
-            <a class="nav-item" onclick="navigate('orcamentos', this)"><i class="fa-solid fa-wallet"></i> Orçamentos</a>
-            <a class="nav-item" onclick="navigate('metas', this)"><i class="fa-solid fa-bullseye"></i> Metas</a>
-            <a class="nav-item" onclick="navigate('investimentos', this)"><i class="fa-solid fa-chart-pie"></i> Investimentos</a>
-            <a class="nav-item" onclick="navigate('dividas', this)"><i class="fa-solid fa-credit-card"></i> Dívidas</a>
-            <a class="nav-item" onclick="navigate('relatorios', this)"><i class="fa-solid fa-file-invoice"></i> Relatórios</a>
-            <a class="nav-item" onclick="navigate('calendario', this)"><i class="fa-solid fa-calendar"></i> Calendário</a>
-            <a class="nav-item" onclick="navigate('simulacoes', this)"><i class="fa-solid fa-flask"></i> Simulações</a>
-            <a class="nav-item" onclick="navigate('config', this)"><i class="fa-solid fa-gear"></i> Configurações</a>
+            <div class="nav-group-label">Principal</div>
+            <a class="nav-item active" data-page="dashboard" onclick="navigate('dashboard', this)"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a class="nav-item" data-page="bancos" onclick="navigate('bancos', this)"><i class="fa-solid fa-building-columns"></i> Open Finance &amp; API <span class="nav-pill">API</span></a>
+            <a class="nav-item" data-page="receitas" onclick="navigate('receitas', this)"><i class="fa-solid fa-arrow-trend-up"></i> Receitas &amp; Renda</a>
+            <a class="nav-item" data-page="despesas" onclick="navigate('despesas', this)"><i class="fa-solid fa-arrow-trend-down"></i> Despesas</a>
+
+            <div class="nav-group-label">Patrimônio</div>
+            <a class="nav-item" data-page="investimentos" onclick="navigate('investimentos', this)"><i class="fa-solid fa-chart-pie"></i> Investimentos</a>
+            <a class="nav-item" data-page="orcamentos" onclick="navigate('orcamentos', this)"><i class="fa-solid fa-wallet"></i> Orçamentos</a>
+            <a class="nav-item" data-page="metas" onclick="navigate('metas', this)"><i class="fa-solid fa-bullseye"></i> Metas</a>
+            <a class="nav-item" data-page="dividas" onclick="navigate('dividas', this)"><i class="fa-solid fa-credit-card"></i> Dívidas</a>
+
+            <div class="nav-group-label">Análise &amp; Gestão</div>
+            <a class="nav-item" data-page="relatorios" onclick="navigate('relatorios', this)"><i class="fa-solid fa-file-invoice-dollar"></i> Relatórios &amp; DRE</a>
+            <a class="nav-item" data-page="calendario" onclick="navigate('calendario', this)"><i class="fa-solid fa-calendar-days"></i> Calendário</a>
+            <a class="nav-item" data-page="simulacoes" onclick="navigate('simulacoes', this)"><i class="fa-solid fa-flask"></i> Simulações &amp; FIRE</a>
+            <a class="nav-item" data-page="config" onclick="navigate('config', this)"><i class="fa-solid fa-gear"></i> Configurações</a>
         </nav>
+
         <div class="sidebar-footer">
             <div class="sidebar-footer-card">
-                <strong><i class="fa-solid fa-star" style="color: var(--accent); margin-right: 6px;"></i>Plano Premium</strong>
-                Acesso completo a simulações financeiras.
+                <strong><i class="fa-solid fa-shield-halved" style="color: var(--success);"></i> Gateway Open Finance</strong>
+                <span id="sidebarSyncStatus">Pronto para sincronizar</span>
             </div>
         </div>
     </aside>
 
     <main class="main-wrapper">
         <header class="topbar">
-            <div class="search-bar">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Pesquisar transações, categorias...">
-            </div>
-            <div class="top-actions">
-                <button class="notification-btn">
-                    <i class="fa-regular fa-bell"></i>
-                    <span class="badge"></span>
+            <div class="topbar-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menu">
+                    <i class="fa-solid fa-bars"></i>
                 </button>
-                <div class="user-profile" style="display:flex; align-items:center; gap:12px;">
-                    <div class="profile-selector" id="profileSelector" style="position:relative;">
-                        <button class="btn btn-outline" onclick="toggleProfileDropdown()" style="padding:6px 12px; font-size:12px; display:flex; align-items:center; gap:6px;">
-                            <i class="fa-solid fa-users"></i>
-                            <span id="currentProfileName">Pessoal</span>
-                            <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
-                        </button>
-                        <div id="profileDropdown" style="display:none; position:absolute; top:100%; right:0; margin-top:4px; background:var(--bg-card); border:1px solid var(--border-color); border-radius:8px; min-width:180px; z-index:100; overflow:hidden;">
-                            <div style="padding:8px 12px; font-size:11px; color:var(--text-sec); text-transform:uppercase; letter-spacing:0.5px;">Meus Perfis</div>
-                            <div id="profileList"></div>
-                            <div style="border-top:1px solid var(--border-color); padding:8px;">
-                                <button class="btn btn-outline" onclick="openProfileModal()" style="width:100%; justify-content:center; font-size:12px; padding:6px 12px;"><i class="fa-solid fa-plus"></i> Novo Perfil</button>
-                            </div>
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="globalSearchInput" placeholder="Buscar transações, bancos, ativos...">
+                </div>
+                <div class="market-ticker" id="liveMarketTicker" title="Cotações de mercado em tempo real (BrasilAPI / AwesomeAPI)">
+                    <span class="ticker-dot"></span>
+                    <span class="ticker-item">Selic <strong id="tickerSelic">11.25%</strong></span>
+                    <span class="ticker-item">CDI <strong id="tickerCdi">11.15%</strong></span>
+                    <span class="ticker-item">USD <strong id="tickerUsd">R$ 5,78</strong></span>
+                    <span class="ticker-item">BTC <strong id="tickerBtc">R$ 512k</strong></span>
+                </div>
+            </div>
+
+            <div class="top-actions">
+                <div class="period-nav" title="Filtrar período de análise">
+                    <button onclick="prevMonth()" title="Mês anterior"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span id="currentPeriodLabel">—</span>
+                    <button onclick="nextMonth()" title="Próximo mês"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+
+                <button class="icon-btn" onclick="togglePrivacyMode()" title="Ocultar / Mostrar valores (Modo Privacidade)">
+                    <i class="fa-regular fa-eye" id="privacyToggleIcon"></i>
+                </button>
+
+                <button class="icon-btn" onclick="toggleTheme()" title="Alternar Tema Claro / Escuro">
+                    <i class="fa-solid fa-moon" id="themeToggleIcon"></i>
+                </button>
+
+                <button class="icon-btn notification-btn" title="Notificações financeiras">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="badge" id="notifBadge"></span>
+                </button>
+
+                <div class="profile-selector" id="profileSelector" style="position:relative;">
+                    <button class="btn btn-outline btn-sm" onclick="toggleProfileDropdown()">
+                        <i class="fa-solid fa-layer-group" style="color:var(--accent);"></i>
+                        <span id="currentProfileName">Pessoal</span>
+                        <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div style="padding:10px 14px; font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.6px; border-bottom:1px solid var(--border-color);">Meus Perfis</div>
+                        <div id="profileList"></div>
+                        <div style="border-top:1px solid var(--border-color); padding:8px;">
+                            <button class="btn btn-outline btn-sm" onclick="openProfileModal()" style="width:100%; justify-content:center;"><i class="fa-solid fa-plus"></i> Novo Perfil</button>
                         </div>
                     </div>
-                    <div class="avatar" id="topbarAvatar" style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--accent), #818CF8); display:flex; align-items:center; justify-content:center; font-weight:600; font-size:14px; color:#fff; cursor:default;">AF</div>
-                    <button class="btn btn-outline" onclick="handleLogout()" style="padding:6px 12px; font-size:12px;"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
                 </div>
+
+                <div class="avatar" id="topbarAvatar">NW</div>
+                <button class="btn btn-outline btn-sm" onclick="handleLogout()" title="Sair / Trocar Conta">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span class="hide-sm">Sair</span>
+                </button>
             </div>
         </header>
 
         <div class="content-area">
 
-            <!-- DASHBOARD -->
+            <!-- ==================== DASHBOARD ==================== -->
             <div id="dashboard" class="page active">
                 <div class="header-actions">
                     <div>
-                        <h1>Visão Geral</h1>
-                        <p class="subtitle">Seu resumo financeiro atualizado hoje.</p>
+                        <h1>Visão Executiva de Renda &amp; Patrimônio</h1>
+                        <p class="subtitle">Monitoramento consolidado de fluxo de caixa, contas bancárias e renda passiva.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="openTransactionModal()"><i class="fa-solid fa-plus"></i> Nova Transação</button>
+                    <div class="header-btn-group">
+                        <button class="btn btn-outline" onclick="syncAllBanks()"><i class="fa-solid fa-arrows-rotate"></i> Sincronizar Bancos</button>
+                        <button class="btn btn-primary" onclick="openTransactionModal()"><i class="fa-solid fa-plus"></i> Nova Transação</button>
+                    </div>
                 </div>
 
+                <!-- Banner Executivo -->
+                <div class="exec-banner">
+                    <div>
+                        <div class="exec-networth-label"><i class="fa-solid fa-gem"></i> Patrimônio Líquido Consolidado</div>
+                        <div class="exec-networth-val sensitive-val" id="execNetWorth">R$ 0,00</div>
+                        <div class="exec-networth-sub sensitive-val" id="execNetWorthBreakdown">Bancos + Investimentos - Dívidas</div>
+                    </div>
+
+                    <div class="exec-fire-box">
+                        <div class="exec-fire-header">
+                            <span><i class="fa-solid fa-fire" style="color:var(--warning); margin-right:6px;"></i>Cobertura de Renda Passiva</span>
+                            <strong style="color:var(--success);" id="execFirePct">0%</strong>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="execFireBar" style="width: 0%; background: linear-gradient(90deg, var(--accent), var(--success));"></div>
+                        </div>
+                        <div class="exec-fire-meta">
+                            <span>Passiva: <strong class="sensitive-val" id="execPassiveMonthly">R$ 0,00</strong></span>
+                            <span>Custo de Vida: <strong class="sensitive-val" id="execExpenseMonthly">R$ 0,00</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="exec-score-box">
+                        <div class="score-circle" id="execScoreCircle">
+                            <div class="score-inner">
+                                <div class="score-val" id="execScoreVal">750</div>
+                                <div class="score-label">/ 1000</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size:11.5px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Score Financeiro</div>
+                            <div style="font-size:16px; font-weight:700; color:var(--text-main); margin:2px 0;" id="execScoreLabel">Excelente</div>
+                            <div style="font-size:11.5px; color:var(--text-sec);" id="execScoreHint">Taxa de poupança e liquidez</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 KPIs -->
                 <div class="grid-4">
-                    <div class="card">
-                        <div class="kpi-title">Saldo Atual</div>
-                        <div class="kpi-value" id="kpiSaldoVal">R$ 14.850,00</div>
-                        <div class="kpi-trend trend-up" id="kpiSaldoTrend"><i class="fa-solid fa-arrow-up"></i> +5.2% vs último mês</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-title">Saldo em Contas</span>
+                            <div class="kpi-icon"><i class="fa-solid fa-building-columns"></i></div>
+                        </div>
+                        <div class="kpi-value sensitive-val" id="kpiSaldoVal">R$ 0,00</div>
+                        <div class="kpi-trend" id="kpiSaldoTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Receita Mensal</div>
-                        <div class="kpi-value" id="kpiReceitaVal">R$ 22.400,00</div>
-                        <div class="kpi-trend trend-up" id="kpiReceitaTrend"><i class="fa-solid fa-arrow-up"></i> +12.0% vs último mês</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-title">Renda Mensal Total</span>
+                            <div class="kpi-icon green"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        </div>
+                        <div class="kpi-value sensitive-val" id="kpiReceitaVal">R$ 0,00</div>
+                        <div class="kpi-trend trend-up" id="kpiReceitaTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Despesas Mensais</div>
-                        <div class="kpi-value" id="kpiDespesaVal">R$ 8.320,50</div>
-                        <div class="kpi-trend trend-down" id="kpiDespesaTrend"><i class="fa-solid fa-arrow-down"></i> -3.1% vs último mês</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-title">Despesas do Mês</span>
+                            <div class="kpi-icon red"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                        </div>
+                        <div class="kpi-value sensitive-val" id="kpiDespesaVal">R$ 0,00</div>
+                        <div class="kpi-trend trend-down" id="kpiDespesaTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Economia Mensal</div>
-                        <div class="kpi-value" id="kpiEconomiaVal">R$ 14.079,50</div>
-                        <div class="kpi-trend trend-up" id="kpiEconomiaTrend"><i class="fa-solid fa-arrow-up"></i> 62.8% taxa de poupança</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-title">Geração de Caixa</span>
+                            <div class="kpi-icon purple"><i class="fa-solid fa-piggy-bank"></i></div>
+                        </div>
+                        <div class="kpi-value sensitive-val" id="kpiEconomiaVal">R$ 0,00</div>
+                        <div class="kpi-trend" id="kpiEconomiaTrend">—</div>
                     </div>
                 </div>
 
+                <!-- Faixa Contas Conectadas -->
+                <div class="card banks-strip-card">
+                    <div class="banks-strip-header">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fa-solid fa-link" style="color:var(--accent);"></i>
+                            <strong style="font-size:14.5px;">Contas &amp; Corretoras Conectadas (Open Finance)</strong>
+                        </div>
+                        <button class="btn btn-outline btn-sm" onclick="navigate('bancos', document.querySelector('[data-page=bancos]'))">
+                            Gerenciar API Bancária <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="banks-strip-grid" id="dashboardBanksStrip"></div>
+                </div>
+
+                <!-- Gráficos Principais -->
                 <div class="grid-60-40">
                     <div class="card">
-                        <h2>Fluxo de Caixa</h2>
-                        <p class="subtitle" style="margin-bottom: 16px;">Receitas e despesas dos últimos 6 meses</p>
-                        <canvas id="cashFlowChart" height="220"></canvas>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                            <div>
+                                <h2 style="margin-bottom:2px;">Fluxo de Caixa &amp; Evolução (6 Meses)</h2>
+                                <p class="subtitle">Receitas confirmadas vs despesas mensais</p>
+                            </div>
+                        </div>
+                        <div style="position:relative; height:250px;">
+                            <canvas id="cashFlowChart"></canvas>
+                        </div>
                     </div>
                     <div class="card">
-                        <h2>Despesas por Categoria</h2>
-                        <p class="subtitle" style="margin-bottom: 16px;">Distribuição do mês atual</p>
-                        <canvas id="expenseCategoryChart" height="220"></canvas>
+                        <h2 style="margin-bottom:2px;">Despesas por Categoria</h2>
+                        <p class="subtitle" style="margin-bottom:14px;">Distribuição do período selecionado</p>
+                        <div style="position:relative; height:250px;">
+                            <canvas id="expenseCategoryChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <h2>Transações Recentes</h2>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Descrição</th>
-                                    <th>Categoria</th>
-                                    <th>Data</th>
-                                    <th>Status</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recentTransactionsBody">
-                            </tbody>
-                        </table>
+                <!-- Tabela Recentes + Renda Ativa vs Passiva -->
+                <div class="grid-60-40">
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                            <h2 style="margin:0;">Transações Recentes</h2>
+                            <button class="btn btn-outline btn-sm" onclick="navigate('receitas', document.querySelector('[data-page=receitas]'))">Ver todas</button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Descrição</th>
+                                        <th>Categoria</th>
+                                        <th>Banco / Método</th>
+                                        <th>Data</th>
+                                        <th>Status</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentTransactionsBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 style="margin-bottom:2px;">Matriz de Renda (Ativa vs Passiva)</h2>
+                        <p class="subtitle" style="margin-bottom:14px;">Qualidade das suas fontes de renda no mês</p>
+                        <div style="position:relative; height:190px;">
+                            <canvas id="incomeSplitChart"></canvas>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px;">
+                            <div style="background:var(--bg-input); border:1px solid var(--border-color); border-radius:10px; padding:10px 12px;">
+                                <div style="font-size:11px; color:var(--text-muted); font-weight:600;">Renda Ativa</div>
+                                <div class="sensitive-val" style="font-size:15px; font-weight:700; color:var(--accent);" id="dashActiveIncomeVal">R$ 0,00</div>
+                            </div>
+                            <div style="background:var(--bg-input); border:1px solid var(--border-color); border-radius:10px; padding:10px 12px;">
+                                <div style="font-size:11px; color:var(--text-muted); font-weight:600;">Renda Passiva (<span id="dashPassiveRatio">0%</span>)</div>
+                                <div class="sensitive-val" style="font-size:15px; font-weight:700; color:var(--success);" id="dashPassiveIncomeVal">R$ 0,00</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- RECEITAS -->
+            <!-- ==================== OPEN FINANCE & BANCOS ==================== -->
+            <div id="bancos" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Open Finance &amp; Integração Bancária (API)</h1>
+                        <p class="subtitle">Conecte bancos via Open Finance (Pluggy/Belvo/OAuth2), sincronize extratos e importe arquivos OFX/CSV.</p>
+                    </div>
+                    <div class="header-btn-group">
+                        <button class="btn btn-outline" onclick="syncAllBanks()"><i class="fa-solid fa-arrows-rotate"></i> Sincronizar Todas</button>
+                        <button class="btn btn-primary" onclick="openBankModal()"><i class="fa-solid fa-plus"></i> Conectar Instituição</button>
+                    </div>
+                </div>
+
+                <div class="grid-4">
+                    <div class="card kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-title">Liquidez em Bancos</span>
+                            <div class="kpi-icon"><i class="fa-solid fa-vault"></i></div>
+                        </div>
+                        <div class="kpi-value sensitive-val" id="kpiBankLiquidity">R$ 0,00</div>
+                        <div class="kpi-trend" id="kpiBankLiquidityTrend">—</div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-title">Contas &amp; Corretoras</span>
+                            <div class="kpi-icon green"><i class="fa-solid fa-plug-circle-check"></i></div>
+                        </div>
+                        <div class="kpi-value" id="kpiBankCount">0</div>
+                        <div class="kpi-trend trend-up" id="kpiBankCountTrend">—</div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-title">Transações Via API</span>
+                            <div class="kpi-icon purple"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+                        </div>
+                        <div class="kpi-value" id="kpiBankSyncedTxs">0</div>
+                        <div class="kpi-trend" id="kpiBankSyncedTrend">—</div>
+                    </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-title">Status do Gateway</span>
+                            <div class="kpi-icon amber"><i class="fa-solid fa-server"></i></div>
+                        </div>
+                        <div class="kpi-value" style="font-size:20px;" id="kpiGatewayStatus">Conectado</div>
+                        <div class="kpi-trend" id="kpiGatewayTrend">—</div>
+                    </div>
+                </div>
+
+                <h2 style="margin-bottom:12px;">Instituições Financeiras Conectadas</h2>
+                <div class="banks-grid" id="connectedBanksGrid"></div>
+
+                <div class="grid-2">
+                    <!-- Gateway API Config -->
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                            <div>
+                                <h2 style="margin-bottom:2px;"><i class="fa-solid fa-code" style="color:var(--accent); margin-right:8px;"></i>Gateway Open Finance &amp; Conectores API</h2>
+                                <p class="subtitle">Configure suas credenciais Pluggy, Belvo ou API Bancária Direta (OAuth2 / mTLS)</p>
+                            </div>
+                            <span class="status-badge status-info"><span class="status-dot"></span> REST / TLS 1.3</span>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Provedor / Agregador</label>
+                                <select class="form-control" id="apiProviderSelect" onchange="onProviderChange()">
+                                    <option value="pluggy">Pluggy Open Finance Brasil</option>
+                                    <option value="belvo">Belvo Open Finance</option>
+                                    <option value="inter">API Direta Banco Inter (OAuth2 mTLS)</option>
+                                    <option value="mercadopago">API Mercado Pago / Asaas PIX</option>
+                                    <option value="sandbox">Sandbox Open Finance Brasil (Simulador)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Ambiente</label>
+                                <select class="form-control" id="apiEnvSelect">
+                                    <option value="sandbox">Sandbox (Testes)</option>
+                                    <option value="production">Produção (Live)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Endpoint Base URL</label>
+                            <input type="text" class="form-control mono" id="apiBaseUrl" value="https://api.pluggy.ai/v1">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Client ID / API Key</label>
+                                <input type="text" class="form-control mono" id="apiClientId" placeholder="cli_live_9f8a2c...">
+                            </div>
+                            <div class="form-group">
+                                <label>Client Secret / Bearer Token</label>
+                                <input type="password" class="form-control mono" id="apiClientSecret" placeholder="••••••••••••">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Webhook Callback URL (Recebimento Automático de Eventos)</label>
+                            <input type="text" class="form-control mono" id="apiWebhookUrl" value="https://nexuswealth.app/api/webhooks/open-finance">
+                        </div>
+
+                        <div class="header-btn-group">
+                            <button class="btn btn-primary" onclick="testApiHandshake()"><i class="fa-solid fa-bolt"></i> Testar Handshake API</button>
+                            <button class="btn btn-outline" onclick="saveApiGatewayConfig()"><i class="fa-solid fa-floppy-disk"></i> Salvar Credenciais</button>
+                            <button class="btn btn-outline btn-sm" onclick="clearApiConsole()" style="margin-left:auto;">Limpar Log</button>
+                        </div>
+
+                        <div class="api-console" id="apiConsoleLog"></div>
+                    </div>
+
+                    <!-- Importação OFX / CSV -->
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                            <div>
+                                <h2 style="margin-bottom:2px;"><i class="fa-solid fa-file-import" style="color:var(--success); margin-right:8px;"></i>Importador de Extratos (OFX / CSV)</h2>
+                                <p class="subtitle">Concilie extratos de Nubank, Itaú, Inter, Bradesco ou Santander com categorização automática</p>
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="statementDropzone" onclick="document.getElementById('statementFileInput').click()">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <div style="font-weight:700; font-size:14px; margin-bottom:4px;">Arraste seu arquivo .OFX ou .CSV aqui</div>
+                            <div style="font-size:12px; color:var(--text-sec);">ou clique para selecionar do computador (extrato bancário ou fatura)</div>
+                            <input type="file" id="statementFileInput" accept=".ofx,.qfx,.csv,.txt" style="display:none;">
+                        </div>
+
+                        <div style="display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap:wrap;">
+                            <button class="btn btn-outline btn-sm" onclick="loadSampleStatement()"><i class="fa-solid fa-wand-magic-sparkles"></i> Carregar Extrato Exemplo (Nubank/Itaú)</button>
+                            <span style="font-size:12px; color:var(--text-muted);" id="statementStatusLabel">Nenhum arquivo carregado</span>
+                        </div>
+
+                        <div id="statementPreviewWrap" style="display:none; margin-top:16px;">
+                            <div class="form-row" style="align-items:end; margin-bottom:10px;">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label>Vincular ao Banco / Conta</label>
+                                    <select class="form-control" id="statementBankSelect"></select>
+                                </div>
+                                <button class="btn btn-success" onclick="importParsedStatement()" style="justify-content:center;">
+                                    <i class="fa-solid fa-check-double"></i> Importar (<span id="statementPreviewCount">0</span>)
+                                </button>
+                            </div>
+                            <div class="table-container" style="max-height:230px; overflow-y:auto; border:1px solid var(--border-color); border-radius:10px;">
+                                <table>
+                                    <thead>
+                                        <tr><th>Data</th><th>Descrição</th><th>Categoria Sugerida</th><th>Tipo</th><th>Valor</th></tr>
+                                    </thead>
+                                    <tbody id="statementPreviewBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== RECEITAS & RENDA ==================== -->
             <div id="receitas" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>Receitas</h1>
-                        <p class="subtitle">Acompanhe todas as suas fontes de renda.</p>
+                        <h1>Receitas &amp; Fontes de Renda</h1>
+                        <p class="subtitle">Gestão profissional de Renda Ativa, Renda Passiva e Receitas Recorrentes (MRR).</p>
                     </div>
-                    <button class="btn btn-primary" onclick="openTransactionModal('receita')"><i class="fa-solid fa-plus"></i> Nova Receita</button>
+                    <div class="header-btn-group">
+                        <button class="btn btn-outline" onclick="exportTransactionsCSV('receita')"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button>
+                        <button class="btn btn-primary" onclick="openTransactionModal('receita')"><i class="fa-solid fa-plus"></i> Nova Receita</button>
+                    </div>
                 </div>
 
-                <div class="grid-3">
-                    <div class="card">
-                        <div class="kpi-title">Total do Mês</div>
-                        <div class="kpi-value" id="kpiReceitaTotalVal">R$ 22.400,00</div>
-                        <div class="kpi-trend trend-up" id="kpiReceitaTotalTrend"><i class="fa-solid fa-arrow-up"></i> +12.0% vs último mês</div>
+                <div class="grid-4">
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Renda Total do Mês</span><div class="kpi-icon green"><i class="fa-solid fa-sack-dollar"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiReceitaTotalVal">R$ 0,00</div>
+                        <div class="kpi-trend trend-up" id="kpiReceitaTotalTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Maior Fonte</div>
-                        <div class="kpi-value" id="kpiMaiorFonteVal">Salário</div>
-                        <div class="kpi-trend" id="kpiMaiorFonteTrend" style="color: var(--text-sec);">80.4% da receita total</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Renda Ativa (Trabalho/PJ)</span><div class="kpi-icon"><i class="fa-solid fa-briefcase"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiRendaAtivaVal">R$ 0,00</div>
+                        <div class="kpi-trend" id="kpiRendaAtivaTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Média Diária</div>
-                        <div class="kpi-value" id="kpiMediaDiariaVal">R$ 746,67</div>
-                        <div class="kpi-trend trend-up" id="kpiMediaDiariaTrend"><i class="fa-solid fa-arrow-up"></i> +8.1% vs último mês</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Renda Passiva (Ativos)</span><div class="kpi-icon purple"><i class="fa-solid fa-coins"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiRendaPassivaVal">R$ 0,00</div>
+                        <div class="kpi-trend trend-up" id="kpiRendaPassivaTrend">—</div>
                     </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Receita Recorrente (MRR)</span><div class="kpi-icon amber"><i class="fa-solid fa-repeat"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiMRRVal">R$ 0,00</div>
+                        <div class="kpi-trend" id="kpiMRRTrend">—</div>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <div class="filter-pills" id="incomeClassPills">
+                        <button class="filter-pill active" onclick="setIncomeFilter('todas', this)">Todas</button>
+                        <button class="filter-pill" onclick="setIncomeFilter('Ativa', this)">Renda Ativa</button>
+                        <button class="filter-pill" onclick="setIncomeFilter('Passiva', this)">Renda Passiva</button>
+                    </div>
+                    <select class="form-control" id="incomeStatusFilter" style="width:auto; padding:7px 12px;" onchange="renderReceitas()">
+                        <option value="todos">Todos os status</option>
+                        <option value="Confirmado">Confirmado</option>
+                        <option value="Pendente">Pendente</option>
+                    </select>
                 </div>
 
                 <div class="grid-60-40">
                     <div class="card">
-                        <h2>Histórico de Receitas</h2>
+                        <h2>Histórico de Recebimentos</h2>
                         <div class="table-container">
                             <table>
                                 <thead>
-                                    <tr><th>Fonte</th><th>Categoria</th><th>Data</th><th>Recorrência</th><th>Status</th><th>Valor</th><th>Ações</th></tr>
+                                    <tr><th>Fonte</th><th>Classificação</th><th>Categoria</th><th>Banco / Método</th><th>Data</th><th>Recorrência</th><th>Status</th><th>Valor</th><th>Ações</th></tr>
                                 </thead>
-                                <tbody id="incomeTableBody">
-                                </tbody>
+                                <tbody id="incomeTableBody"></tbody>
                             </table>
                         </div>
                     </div>
                     <div class="card">
-                        <h2>Receita por Fonte</h2>
-                        <canvas id="incomeSourceChart" height="240"></canvas>
+                        <h2>Receita por Categoria</h2>
+                        <div style="position:relative; height:240px;">
+                            <canvas id="incomeSourceChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- DESPESAS -->
+            <!-- ==================== DESPESAS ==================== -->
             <div id="despesas" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>Despesas</h1>
-                        <p class="subtitle">Veja para onde seu dinheiro está indo.</p>
+                        <h1>Despesas &amp; Controle de Saídas</h1>
+                        <p class="subtitle">Acompanhe gastos fixos, variáveis e faturas vinculadas às suas contas.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="openTransactionModal('despesa')"><i class="fa-solid fa-plus"></i> Nova Despesa</button>
+                    <div class="header-btn-group">
+                        <button class="btn btn-outline" onclick="exportTransactionsCSV('despesa')"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button>
+                        <button class="btn btn-primary" onclick="openTransactionModal('despesa')"><i class="fa-solid fa-plus"></i> Nova Despesa</button>
+                    </div>
                 </div>
 
-                <div class="grid-3">
-                    <div class="card">
-                        <div class="kpi-title">Total Gasto no Mês</div>
-                        <div class="kpi-value" id="kpiDespesaTotalVal">R$ 8.320,50</div>
-                        <div class="kpi-trend trend-down" id="kpiDespesaTotalTrend"><i class="fa-solid fa-arrow-down"></i> -3.1% vs último mês</div>
+                <div class="grid-4">
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Total Gasto no Mês</span><div class="kpi-icon red"><i class="fa-solid fa-money-bill-wave"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiDespesaTotalVal">R$ 0,00</div>
+                        <div class="kpi-trend trend-down" id="kpiDespesaTotalTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Categoria que Mais Pesa</div>
-                        <div class="kpi-value" id="kpiMaiorCategoriaVal">Moradia</div>
-                        <div class="kpi-trend" id="kpiMaiorCategoriaTrend" style="color: var(--text-sec);">28.8% das despesas</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Maior Categoria</span><div class="kpi-icon amber"><i class="fa-solid fa-chart-simple"></i></div></div>
+                        <div class="kpi-value" id="kpiMaiorCategoriaVal">—</div>
+                        <div class="kpi-trend" id="kpiMaiorCategoriaTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Gasto Médio Diário</div>
-                        <div class="kpi-value" id="kpiGastoMedioVal">R$ 277,35</div>
-                        <div class="kpi-trend trend-up" id="kpiGastoMedioTrend"><i class="fa-solid fa-arrow-up"></i> +1.4% vs último mês</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Gasto Médio Diário</span><div class="kpi-icon"><i class="fa-solid fa-calendar-day"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiGastoMedioVal">R$ 0,00</div>
+                        <div class="kpi-trend" id="kpiGastoMedioTrend">—</div>
                     </div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Contas a Pagar</span><div class="kpi-icon red"><i class="fa-solid fa-clock"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiDespesaPendenteVal">R$ 0,00</div>
+                        <div class="kpi-trend" id="kpiDespesaPendenteTrend">—</div>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <select class="form-control" id="expenseCategoryFilter" style="width:auto; padding:7px 12px;" onchange="renderDespesas()">
+                        <option value="todas">Todas categorias</option>
+                        <option value="Moradia">Moradia</option>
+                        <option value="Alimentação">Alimentação</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Lazer">Lazer</option>
+                        <option value="Saúde">Saúde</option>
+                        <option value="Educação">Educação</option>
+                        <option value="Utilidades">Utilidades</option>
+                        <option value="Cartão">Cartão</option>
+                        <option value="Impostos">Impostos</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                    <select class="form-control" id="expenseStatusFilter" style="width:auto; padding:7px 12px;" onchange="renderDespesas()">
+                        <option value="todos">Todos os status</option>
+                        <option value="Confirmado">Confirmado</option>
+                        <option value="Pendente">Pendente</option>
+                    </select>
                 </div>
 
                 <div class="grid-60-40">
@@ -229,125 +578,132 @@
                         <div class="table-container">
                             <table>
                                 <thead>
-                                    <tr><th>Descrição</th><th>Categoria</th><th>Data</th><th>Recorrência</th><th>Status</th><th>Valor</th><th>Ações</th></tr>
+                                    <tr><th>Descrição</th><th>Categoria</th><th>Banco / Método</th><th>Data</th><th>Recorrência</th><th>Status</th><th>Valor</th><th>Ações</th></tr>
                                 </thead>
-                                <tbody id="expenseTableBody">
-                                </tbody>
+                                <tbody id="expenseTableBody"></tbody>
                             </table>
                         </div>
                     </div>
                     <div class="card">
                         <h2>Despesas por Categoria</h2>
-                        <canvas id="expenseBreakdownChart" height="240"></canvas>
+                        <div style="position:relative; height:250px;">
+                            <canvas id="expenseBreakdownChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ORÇAMENTOS -->
-            <div id="orcamentos" class="page">
-                <div class="header-actions">
-                    <div>
-                        <h1>Orçamentos</h1>
-                        <p class="subtitle">Defina limites e acompanhe seus gastos por categoria.</p>
-                    </div>
-                    <button class="btn btn-primary" onclick="openBudgetModal()"><i class="fa-solid fa-plus"></i> Novo Orçamento</button>
-                </div>
-
-                <div class="grid-3" id="budgetsContainer">
-                </div>
-            </div>
-
-            <!-- METAS -->
-            <div id="metas" class="page">
-                <div class="header-actions">
-                    <div>
-                        <h1>Metas Financeiras</h1>
-                        <p class="subtitle">Acompanhe o progresso dos seus objetivos.</p>
-                    </div>
-                    <button class="btn btn-primary" onclick="openGoalModal()"><i class="fa-solid fa-plus"></i> Nova Meta</button>
-                </div>
-
-                <div class="grid-3" id="goalsContainer">
-                </div>
-            </div>
-
-            <!-- INVESTIMENTOS -->
+            <!-- ==================== INVESTIMENTOS ==================== -->
             <div id="investimentos" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>Investimentos</h1>
-                        <p class="subtitle">Sua carteira consolidada em um só lugar.</p>
+                        <h1>Investimentos &amp; Renda Passiva</h1>
+                        <p class="subtitle">Carteira consolidada com rentabilidade real, proventos mensais e benchmarks ao vivo.</p>
                     </div>
-                    <button class="btn btn-primary" onclick="openInvestmentModal()"><i class="fa-solid fa-plus"></i> Adicionar Ativo</button>
-                    <button class="btn btn-outline"><i class="fa-solid fa-arrow-up-right-from-square"></i> Exportar carteira</button>
+                    <div class="header-btn-group">
+                        <button class="btn btn-outline" onclick="exportInvestmentsCSV()"><i class="fa-solid fa-file-arrow-down"></i> Exportar Carteira</button>
+                        <button class="btn btn-primary" onclick="openInvestmentModal()"><i class="fa-solid fa-plus"></i> Adicionar Ativo</button>
+                    </div>
+                </div>
+
+                <div class="benchmarks-strip">
+                    <div class="benchmark-pill"><span>Taxa Selic</span><strong id="invBenchSelic">11.25% a.a.</strong></div>
+                    <div class="benchmark-pill"><span>CDI Acumulado</span><strong id="invBenchCdi">11.15% a.a.</strong></div>
+                    <div class="benchmark-pill"><span>IPCA (12m)</span><strong id="invBenchIpca">4.50% a.a.</strong></div>
+                    <div class="benchmark-pill"><span>Dólar (USD/BRL)</span><strong id="invBenchUsd">R$ 5,78</strong></div>
                 </div>
 
                 <div class="grid-4">
-                    <div class="card">
-                        <div class="kpi-title">Patrimônio Total</div>
-                        <div class="kpi-value" id="kpiPatrimonioVal">R$ 187.420,00</div>
-                        <div class="kpi-trend trend-up" id="kpiPatrimonioTrend"><i class="fa-solid fa-arrow-up"></i> +3.4% no mês</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Patrimônio Investido</span><div class="kpi-icon"><i class="fa-solid fa-chart-line"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiPatrimonioVal">R$ 0,00</div>
+                        <div class="kpi-trend trend-up" id="kpiPatrimonioTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Rentabilidade no Ano</div>
-                        <div class="kpi-value" id="kpiRentabilidadeVal">+14.8%</div>
-                        <div class="kpi-trend trend-up" id="kpiRentabilidadeTrend"><i class="fa-solid fa-arrow-up"></i> acima do CDI</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Rentabilidade Média</span><div class="kpi-icon green"><i class="fa-solid fa-percent"></i></div></div>
+                        <div class="kpi-value" id="kpiRentabilidadeVal">0%</div>
+                        <div class="kpi-trend trend-up" id="kpiRentabilidadeTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Aportes no Mês</div>
-                        <div class="kpi-value" id="kpiAportesVal">R$ 4.200,00</div>
-                        <div class="kpi-trend" id="kpiAportesTrend" style="color: var(--text-sec);">automático todo dia 25</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Dividendos Mensais</span><div class="kpi-icon purple"><i class="fa-solid fa-hand-holding-dollar"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiDividendosVal">R$ 0,00</div>
+                        <div class="kpi-trend trend-up" id="kpiDividendosTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Dividendos Recebidos</div>
-                        <div class="kpi-value" id="kpiDividendosVal">R$ 680,00</div>
-                        <div class="kpi-trend trend-up" id="kpiDividendosTrend"><i class="fa-solid fa-arrow-up"></i> +9.6% vs último mês</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Yield on Cost (Mensal)</span><div class="kpi-icon amber"><i class="fa-solid fa-coins"></i></div></div>
+                        <div class="kpi-value" id="kpiYieldVal">0.00%</div>
+                        <div class="kpi-trend" id="kpiYieldTrend">—</div>
                     </div>
                 </div>
 
                 <div class="grid-60-40">
                     <div class="card">
-                        <h2>Carteira por Classe de Ativo</h2>
+                        <h2>Carteira de Ativos</h2>
                         <div class="table-container">
                             <table>
-                                <thead><tr><th>Ativo</th><th>Classe</th><th>Valor Investido</th><th>Rentabilidade</th></tr></thead>
-                                <tbody id="investmentsTableBody">
-                                </tbody>
+                                <thead><tr><th>Ativo</th><th>Classe</th><th>Corretora</th><th>Valor Investido</th><th>Rentab. a.a.</th><th>Dividendo/Mês</th><th>Ações</th></tr></thead>
+                                <tbody id="investmentsTableBody"></tbody>
                             </table>
                         </div>
                     </div>
                     <div class="card">
-                        <h2>Alocação da Carteira</h2>
-                        <canvas id="investmentAllocationChart" height="240"></canvas>
+                        <h2>Alocação por Classe</h2>
+                        <div style="position:relative; height:250px;">
+                            <canvas id="investmentAllocationChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- DÍVIDAS -->
+            <!-- ==================== ORÇAMENTOS ==================== -->
+            <div id="orcamentos" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Orçamentos Mensais</h1>
+                        <p class="subtitle">Limites por categoria calculados automaticamente com base nas despesas do período.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openBudgetModal()"><i class="fa-solid fa-plus"></i> Novo Orçamento</button>
+                </div>
+                <div class="grid-3" id="budgetsContainer"></div>
+            </div>
+
+            <!-- ==================== METAS ==================== -->
+            <div id="metas" class="page">
+                <div class="header-actions">
+                    <div>
+                        <h1>Metas Financeiras</h1>
+                        <p class="subtitle">Acompanhe objetivos, faça aportes rápidos e monitore o progresso.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openGoalModal()"><i class="fa-solid fa-plus"></i> Nova Meta</button>
+                </div>
+                <div class="grid-3" id="goalsContainer"></div>
+            </div>
+
+            <!-- ==================== DÍVIDAS ==================== -->
             <div id="dividas" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>Dívidas</h1>
-                        <p class="subtitle">Controle seus financiamentos e parcelamentos.</p>
+                        <h1>Gestão de Dívidas &amp; Passivos</h1>
+                        <p class="subtitle">Controle financiamentos, taxas efetivas e amortize parcelas.</p>
                     </div>
                     <button class="btn btn-primary" onclick="openDebtModal()"><i class="fa-solid fa-plus"></i> Adicionar Dívida</button>
                 </div>
 
                 <div class="grid-3">
-                    <div class="card">
-                        <div class="kpi-title">Total em Aberto</div>
-                        <div class="kpi-value" id="kpiDividaTotalVal">R$ 64.380,00</div>
-                        <div class="kpi-trend trend-down" id="kpiDividaTotalTrend"><i class="fa-solid fa-arrow-down"></i> -4.2% vs último mês</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Total em Aberto</span><div class="kpi-icon red"><i class="fa-solid fa-file-invoice-dollar"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiDividaTotalVal">R$ 0,00</div>
+                        <div class="kpi-trend trend-down" id="kpiDividaTotalTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Pagamento Mensal Total</div>
-                        <div class="kpi-value" id="kpiPagamentoMensalVal">R$ 3.180,00</div>
-                        <div class="kpi-trend" id="kpiPagamentoMensalTrend" style="color: var(--text-sec);">comprometendo 14.2% da renda</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Parcela Mensal Total</span><div class="kpi-icon amber"><i class="fa-solid fa-calendar-check"></i></div></div>
+                        <div class="kpi-value sensitive-val" id="kpiPagamentoMensalVal">R$ 0,00</div>
+                        <div class="kpi-trend" id="kpiPagamentoMensalTrend">—</div>
                     </div>
-                    <div class="card">
-                        <div class="kpi-title">Previsão de Quitação</div>
-                        <div class="kpi-value" id="kpiPrevisaoQuitacaoVal">22 meses</div>
-                        <div class="kpi-trend" id="kpiPrevisaoQuitacaoTrend" style="color: var(--text-sec);">mantendo o ritmo atual</div>
+                    <div class="card kpi-card">
+                        <div class="kpi-top"><span class="kpi-title">Previsão de Quitação</span><div class="kpi-icon"><i class="fa-solid fa-hourglass-half"></i></div></div>
+                        <div class="kpi-value" id="kpiPrevisaoQuitacaoVal">—</div>
+                        <div class="kpi-trend" id="kpiPrevisaoQuitacaoTrend">—</div>
                     </div>
                 </div>
 
@@ -355,67 +711,83 @@
                     <h2>Dívidas Ativas</h2>
                     <div class="table-container">
                         <table>
-                            <thead><tr><th>Dívida</th><th>Saldo Devedor</th><th>Taxa de Juros</th><th>Parcela Mensal</th><th>Progresso</th></tr></thead>
-                            <tbody id="debtsTableBody">
-                            </tbody>
+                            <thead><tr><th>Dívida</th><th>Saldo Devedor</th><th>Taxa de Juros</th><th>Parcela Mensal</th><th>Progresso</th><th>Ações</th></tr></thead>
+                            <tbody id="debtsTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- RELATÓRIOS -->
+            <!-- ==================== RELATÓRIOS & DRE ==================== -->
             <div id="relatorios" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>Relatórios</h1>
-                        <p class="subtitle">Gere relatórios detalhados da sua vida financeira.</p>
+                        <h1>Relatórios Profissionais &amp; DRE</h1>
+                        <p class="subtitle">Demonstrativo de Resultados (DRE), exportação CSV/IRPF e relatório executivo para impressão/PDF.</p>
                     </div>
                 </div>
 
                 <div class="grid-3">
                     <div class="card report-type-card">
-                        <div class="report-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                        <div class="report-icon"><i class="fa-solid fa-file-csv"></i></div>
                         <div>
-                            <h2 style="margin-bottom: 4px;">Resumo Mensal</h2>
-                            <p class="subtitle" style="margin: 0;">Receitas, despesas e economia de junho de 2026.</p>
+                            <h2 style="margin-bottom:4px;">Extrato Consolidado (CSV)</h2>
+                            <p class="subtitle">Exporte todas as receitas e despesas com banco, categoria e status para Excel.</p>
                         </div>
-                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatório</button>
+                        <button class="btn btn-outline" onclick="exportTransactionsCSV()"><i class="fa-solid fa-download"></i> Baixar CSV</button>
                     </div>
                     <div class="card report-type-card">
-                        <div class="report-icon" style="background: rgba(129,140,248,0.1); color: var(--purple);"><i class="fa-solid fa-chart-line"></i></div>
+                        <div class="report-icon" style="background:rgba(167,139,250,0.14); color:var(--purple);"><i class="fa-solid fa-print"></i></div>
                         <div>
-                            <h2 style="margin-bottom: 4px;">Relatório Anual</h2>
-                            <p class="subtitle" style="margin: 0;">Consolidado completo do ano de 2026.</p>
+                            <h2 style="margin-bottom:4px;">Relatório Executivo (PDF)</h2>
+                            <p class="subtitle">Gere uma versão limpa formatada para impressão ou salvamento em PDF.</p>
                         </div>
-                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatório</button>
+                        <button class="btn btn-outline" onclick="printExecutiveReport()"><i class="fa-solid fa-file-pdf"></i> Imprimir / PDF</button>
                     </div>
                     <div class="card report-type-card">
-                        <div class="report-icon" style="background: rgba(34,197,94,0.1); color: var(--success);"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <div class="report-icon" style="background:var(--success-soft); color:var(--success);"><i class="fa-solid fa-landmark"></i></div>
                         <div>
-                            <h2 style="margin-bottom: 4px;">Declaração de IR</h2>
-                            <p class="subtitle" style="margin: 0;">Organize bens, rendas e investimentos.</p>
+                            <h2 style="margin-bottom:4px;">Informe de Bens e Renda (IR)</h2>
+                            <p class="subtitle">Resumo consolidado de rendimentos, ativos e dívidas para declaração de IR.</p>
                         </div>
-                        <button class="btn btn-outline" onclick="this.innerHTML='<i class=\'fa-solid fa-check\'></i> Gerado'"><i class="fa-solid fa-file-arrow-down"></i> Gerar relatório</button>
+                        <button class="btn btn-outline" onclick="exportIRReportCSV()"><i class="fa-solid fa-file-export"></i> Exportar Informe IR</button>
                     </div>
                 </div>
 
-                <div class="card">
-                    <h2>Receitas vs Despesas — últimos 6 meses</h2>
-                    <canvas id="reportsSummaryChart" height="260"></canvas>
+                <div class="grid-60-40">
+                    <div class="card">
+                        <h2>DRE — Demonstrativo de Resultados (<span id="drePeriodLabel">—</span>)</h2>
+                        <div class="table-container">
+                            <table>
+                                <thead><tr><th>Conta Gerencial</th><th>Participação</th><th>Valor</th></tr></thead>
+                                <tbody id="dreTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Receitas vs Despesas (Últimos 6 Meses)</h2>
+                        <div style="position:relative; height:290px;">
+                            <canvas id="reportsSummaryChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- CALENDÁRIO -->
+            <!-- ==================== CALENDÁRIO ==================== -->
             <div id="calendario" class="page">
                 <div class="header-actions">
                     <div>
                         <h1>Calendário Financeiro</h1>
-                        <p class="subtitle">Junho de 2026 — vencimentos, recebimentos e aportes.</p>
+                        <p class="subtitle" id="calSubtitle">Vencimentos, recebimentos e aportes programados.</p>
+                    </div>
+                    <div class="header-btn-group">
+                        <span class="status-badge status-success">Receitas: <strong class="sensitive-val" id="calIncomeSum">R$ 0,00</strong></span>
+                        <span class="status-badge status-error">Despesas: <strong class="sensitive-val" id="calExpenseSum">R$ 0,00</strong></span>
+                        <span class="status-badge status-info">Saldo: <strong class="sensitive-val" id="calNetSum">R$ 0,00</strong></span>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="calendar-grid" id="calendarGrid">
-                    </div>
+                    <div class="calendar-grid" id="calendarGrid"></div>
                     <div class="legend-row">
                         <div class="legend-item"><span class="legend-dot" style="background: var(--success);"></span> Receita</div>
                         <div class="legend-item"><span class="legend-dot" style="background: var(--error);"></span> Despesa</div>
@@ -424,144 +796,144 @@
                 </div>
             </div>
 
-            <!-- SIMULAÇÕES -->
+            <!-- ==================== SIMULAÇÕES & FIRE ==================== -->
             <div id="simulacoes" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>Simulações</h1>
-                        <p class="subtitle">Projete cenários antes de tomar decisões financeiras.</p>
+                        <h1>Simulações Financeiras &amp; Independência (FIRE)</h1>
+                        <p class="subtitle">Projete juros compostos, amortização de crédito e seu número da liberdade financeira.</p>
                     </div>
                 </div>
 
                 <div class="grid-2">
                     <div class="card">
-                        <h2><i class="fa-solid fa-chart-simple" style="color: var(--accent); margin-right: 8px;"></i>Juros Compostos</h2>
-                        <div class="form-group"><label>Valor inicial (R$)</label><input type="number" class="form-control" id="simValorInicial" value="5000"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                            <h2 style="margin:0;"><i class="fa-solid fa-chart-simple" style="color: var(--accent); margin-right: 8px;"></i>Juros Compostos</h2>
+                            <button class="btn btn-outline btn-sm" onclick="fillSelicRate()">Usar Selic Atual</button>
+                        </div>
+                        <div class="form-group"><label>Valor inicial (R$)</label><input type="number" class="form-control" id="simValorInicial" value="15000"></div>
                         <div class="form-row">
-                            <div class="form-group"><label>Aporte mensal (R$)</label><input type="number" class="form-control" id="simAporte" value="500"></div>
-                            <div class="form-group"><label>Taxa de juros anual (%)</label><input type="number" class="form-control" id="simTaxa" value="10"></div>
+                            <div class="form-group"><label>Aporte mensal (R$)</label><input type="number" class="form-control" id="simAporte" value="2000"></div>
+                            <div class="form-group"><label>Taxa anual (% a.a.)</label><input type="number" class="form-control" id="simTaxa" value="11.25" step="0.05"></div>
                         </div>
                         <div class="form-group"><label>Período (meses)</label><input type="number" class="form-control" id="simMeses" value="60"></div>
-                        <button class="btn btn-primary" onclick="calcularJurosCompostos()" style="width: 100%; justify-content: center;"><i class="fa-solid fa-calculator"></i> Calcular</button>
+                        <button class="btn btn-primary" onclick="calcularJurosCompostos()" style="width: 100%; justify-content: center;"><i class="fa-solid fa-calculator"></i> Calcular Projeção</button>
                         <div class="sim-result-grid">
-                            <div class="sim-result-box"><div class="label">Total Investido</div><div class="value" id="simInvestido" style="color: var(--text-main);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Total Investido</div><div class="value" id="simInvestido">—</div></div>
                             <div class="sim-result-box"><div class="label">Total em Juros</div><div class="value" id="simJuros" style="color: var(--success);">—</div></div>
                             <div class="sim-result-box"><div class="label">Valor Final</div><div class="value" id="simFinal" style="color: var(--accent);">—</div></div>
                         </div>
-                        <canvas id="simChart" height="180" style="margin-top: 20px;"></canvas>
+                        <div style="position:relative; height:180px; margin-top:16px;">
+                            <canvas id="simChart"></canvas>
+                        </div>
                     </div>
 
                     <div class="card">
-                        <h2><i class="fa-solid fa-hand-holding-dollar" style="color: var(--purple); margin-right: 8px;"></i>Simulador de Empréstimo</h2>
-                        <div class="form-group"><label>Valor do empréstimo (R$)</label><input type="number" class="form-control" id="loanValor" value="20000"></div>
+                        <h2><i class="fa-solid fa-hand-holding-dollar" style="color: var(--purple); margin-right: 8px;"></i>Simulador de Empréstimo / Financiamento</h2>
+                        <div class="form-group"><label>Valor financiado (R$)</label><input type="number" class="form-control" id="loanValor" value="35000"></div>
                         <div class="form-row">
-                            <div class="form-group"><label>Taxa de juros mensal (%)</label><input type="number" class="form-control" id="loanTaxa" value="1.8" step="0.1"></div>
-                            <div class="form-group"><label>Número de parcelas</label><input type="number" class="form-control" id="loanParcelas" value="24"></div>
+                            <div class="form-group"><label>Taxa de juros mensal (%)</label><input type="number" class="form-control" id="loanTaxa" value="1.6" step="0.1"></div>
+                            <div class="form-group"><label>Número de parcelas</label><input type="number" class="form-control" id="loanParcelas" value="36"></div>
                         </div>
-                        <button class="btn btn-primary" onclick="calcularEmprestimo()" style="width: 100%; justify-content: center;"><i class="fa-solid fa-calculator"></i> Calcular</button>
+                        <button class="btn btn-primary" onclick="calcularEmprestimo()" style="width: 100%; justify-content: center;"><i class="fa-solid fa-calculator"></i> Calcular Tabela Price</button>
                         <div class="sim-result-grid">
-                            <div class="sim-result-box"><div class="label">Parcela Mensal</div><div class="value" id="loanParcela" style="color: var(--text-main);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Parcela Mensal</div><div class="value" id="loanParcela">—</div></div>
                             <div class="sim-result-box"><div class="label">Total de Juros</div><div class="value" id="loanJuros" style="color: var(--error);">—</div></div>
                             <div class="sim-result-box"><div class="label">Total Pago</div><div class="value" id="loanTotal" style="color: var(--purple);">—</div></div>
                         </div>
-                        <p class="subtitle" style="margin-top: 24px; margin-bottom: 0;">Simulação ilustrativa. Condições reais dependem da instituição financeira.</p>
+
+                        <hr style="border:none; border-top:1px solid var(--border-color); margin:24px 0;">
+
+                        <h2><i class="fa-solid fa-fire" style="color: var(--warning); margin-right: 8px;"></i>Calculadora FIRE (Independência Financeira)</h2>
+                        <div class="form-row">
+                            <div class="form-group"><label>Custo de vida mensal (R$)</label><input type="number" class="form-control" id="fireGastoMensal" value="7000"></div>
+                            <div class="form-group"><label>Patrimônio investido atual (R$)</label><input type="number" class="form-control" id="firePatrimonioAtual" value="150000"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Aporte mensal (R$)</label><input type="number" class="form-control" id="fireAporteMensal" value="3500"></div>
+                            <div class="form-group"><label>Rentabilidade real (% a.a. acima inflação)</label><input type="number" class="form-control" id="fireTaxaReal" value="6.5" step="0.1"></div>
+                        </div>
+                        <button class="btn btn-success" onclick="calcularFIRE()" style="width: 100%; justify-content: center;"><i class="fa-solid fa-rocket"></i> Simular Independência Financeira</button>
+                        <div class="sim-result-grid">
+                            <div class="sim-result-box"><div class="label">Número FIRE (Regra 4%)</div><div class="value" id="fireNumeroAlvo" style="color:var(--accent);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Tempo Estimado</div><div class="value" id="fireTempoAnos" style="color:var(--success);">—</div></div>
+                            <div class="sim-result-box"><div class="label">Renda Passiva / Mês</div><div class="value" id="fireRendaPassivaAlvo">—</div></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- CONFIGURAÇÕES -->
+            <!-- ==================== CONFIGURAÇÕES ==================== -->
             <div id="config" class="page">
                 <div class="header-actions">
                     <div>
-                        <h1>Configurações</h1>
-                        <p class="subtitle">Gerencie seu perfil, preferências e segurança.</p>
+                        <h1>Configurações &amp; Backup</h1>
+                        <p class="subtitle">Gerencie perfil, preferências visuais, múltiplos perfis (PF/PJ) e backup dos dados.</p>
                     </div>
                 </div>
 
                 <div class="grid-2">
                     <div class="card">
-                        <h2>Perfil</h2>
+                        <h2>Perfil do Usuário</h2>
                         <div class="settings-profile-header">
-                            <div class="settings-avatar" id="configAvatar">AF</div>
+                            <div class="settings-avatar" id="configAvatar">NW</div>
                             <div>
-                                <button class="btn btn-outline" style="margin-bottom: 4px;">Alterar foto</button>
-                                <p class="subtitle" style="margin: 4px 0 0;">JPG ou PNG, até 2MB.</p>
+                                <strong style="font-size:15px;" id="configProfileModeTag">Conta Conectada</strong>
+                                <p class="subtitle" style="margin:2px 0 0;">Dados sincronizados por perfil</p>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group"><label>Nome completo</label><input type="text" class="form-control" id="configName" value="Alexandre Ferreira"></div>
-                            <div class="form-group"><label>E-mail</label><input type="email" class="form-control" id="configEmail" value="alexandre.ferreira@email.com"></div>
+                            <div class="form-group"><label>Nome completo</label><input type="text" class="form-control" id="configName" placeholder="Seu nome"></div>
+                            <div class="form-group"><label>E-mail</label><input type="email" class="form-control" id="configEmail" disabled></div>
                         </div>
-                        <div class="form-group"><label>Telefone</label><input type="text" class="form-control" value="(11) 98765-4321"></div>
-                        <button class="btn btn-primary">Salvar alterações</button>
+                        <div class="form-group"><label>Telefone</label><input type="text" class="form-control" id="configPhone" placeholder="(11) 99999-9999"></div>
+                        <button class="btn btn-primary" onclick="saveUserProfileConfig()"><i class="fa-solid fa-check"></i> Salvar Perfil</button>
                     </div>
 
                     <div class="card">
-                        <h2>Preferências</h2>
-                        <div class="form-group"><label>Moeda padrão</label>
-                            <select class="form-control">
-                                <option>Real Brasileiro (R$)</option>
-                                <option>Dólar Americano (US$)</option>
-                                <option>Euro (€)</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label>Idioma</label>
-                            <select class="form-control">
-                                <option>Português (Brasil)</option>
-                                <option>English (US)</option>
-                                <option>Español</option>
+                        <h2>Preferências do Sistema</h2>
+                        <div class="form-group"><label>Moeda de exibição</label>
+                            <select class="form-control" id="prefCurrency" onchange="savePreferences()">
+                                <option value="BRL">Real Brasileiro (R$)</option>
+                                <option value="USD">Dólar Americano (US$)</option>
+                                <option value="EUR">Euro (€)</option>
                             </select>
                         </div>
                         <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>Alertas de orçamento</strong><span>Avisar quando atingir 80% do limite</span></div>
-                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            <div class="toggle-row-text"><strong>Modo escuro</strong><span>Alternar entre tema Obsidian Dark e Clean Light</span></div>
+                            <label class="switch"><input type="checkbox" id="prefDarkMode" checked onchange="toggleTheme(this.checked)"><span class="slider"></span></label>
                         </div>
                         <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>Resumo semanal por e-mail</strong><span>Receber todo domingo às 8h</span></div>
-                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            <div class="toggle-row-text"><strong>Iniciar com Modo Privacidade</strong><span>Oculta saldos sensíveis ao abrir</span></div>
+                            <label class="switch"><input type="checkbox" id="prefPrivacyDefault" onchange="savePreferences()"><span class="slider"></span></label>
                         </div>
                         <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>Modo escuro</strong><span>Reduz o brilho da interface</span></div>
-                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            <div class="toggle-row-text"><strong>Alertas de orçamento (80%)</strong><span>Exibir alertas no sino de notificações</span></div>
+                            <label class="switch"><input type="checkbox" id="prefBudgetAlerts" checked onchange="savePreferences()"><span class="slider"></span></label>
                         </div>
                     </div>
 
                     <div class="card">
-                        <h2>Segurança</h2>
-                        <div class="form-group"><label>Senha atual</label><input type="password" class="form-control" placeholder="••••••••"></div>
-                        <div class="form-row">
-                            <div class="form-group"><label>Nova senha</label><input type="password" class="form-control" placeholder="••••••••"></div>
-                            <div class="form-group"><label>Confirmar nova senha</label><input type="password" class="form-control" placeholder="••••••••"></div>
-                        </div>
-                        <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>Autenticação em duas etapas</strong><span>Proteção extra ao fazer login</span></div>
-                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-                        </div>
-                        <button class="btn btn-primary" style="margin-top: 16px;">Atualizar senha</button>
-                    </div>
-
-                    <div class="card">
-                        <h2>Meus Perfis</h2>
-                        <p class="subtitle" style="margin:0 0 12px;">Gerencie perfis como Pessoal, PJ, etc.</p>
+                        <h2>Meus Perfis (PF / PJ / Investidor)</h2>
+                        <p class="subtitle" style="margin:0 0 12px;">Separe suas finanças pessoais, empresa PJ e carteira de investimentos.</p>
                         <div id="profileSettingsList"></div>
-                        <button class="btn btn-primary" onclick="openProfileModal()" style="margin-top:8px;"><i class="fa-solid fa-plus"></i> Novo Perfil</button>
+                        <button class="btn btn-primary btn-sm" onclick="openProfileModal()" style="margin-top:12px;"><i class="fa-solid fa-plus"></i> Novo Perfil</button>
                     </div>
 
                     <div class="card">
-                        <h2>Contas Conectadas</h2>
-                        <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>Nubank</strong><span>Conta corrente conectada</span></div>
-                            <span class="status-badge status-success">Ativa</span>
+                        <h2>Contas Bancárias &amp; Gestão de Dados</h2>
+                        <div id="configConnectedBanksList" style="margin-bottom:14px;"></div>
+                        <div class="header-btn-group" style="margin-bottom:18px;">
+                            <button class="btn btn-outline btn-sm" onclick="navigate('bancos', document.querySelector('[data-page=bancos]'))"><i class="fa-solid fa-building-columns"></i> Gerenciar no Open Finance</button>
                         </div>
-                        <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>Itaú</strong><span>Conta corrente conectada</span></div>
-                            <span class="status-badge status-success">Ativa</span>
+                        <hr style="border:none; border-top:1px solid var(--border-color); margin:16px 0;">
+                        <h3 style="font-size:14px; margin-bottom:10px;">Backup &amp; Restauração</h3>
+                        <div class="header-btn-group">
+                            <button class="btn btn-outline btn-sm" onclick="exportBackupJSON()"><i class="fa-solid fa-download"></i> Exportar JSON</button>
+                            <button class="btn btn-outline btn-sm" onclick="document.getElementById('importBackupInput').click()"><i class="fa-solid fa-upload"></i> Restaurar JSON</button>
+                            <input type="file" id="importBackupInput" accept=".json" style="display:none;" onchange="importBackupJSON(event)">
+                            <button class="btn btn-outline btn-sm" onclick="resetDemoData()" style="color:var(--warning);"><i class="fa-solid fa-rotate-left"></i> Restaurar Dados Demo</button>
                         </div>
-                        <div class="toggle-row">
-                            <div class="toggle-row-text"><strong>XP Investimentos</strong><span>Corretora conectada</span></div>
-                            <span class="status-badge status-success">Ativa</span>
-                        </div>
-                        <button class="btn btn-outline" style="margin-top: 16px;"><i class="fa-solid fa-link"></i> Conectar nova conta</button>
                     </div>
                 </div>
             </div>
@@ -570,147 +942,79 @@
     </main>
 </div>
 
-<!-- MODAL: META -->
-<div class="modal-overlay" id="goalModal">
+<!-- ==================== MODAIS ==================== -->
+
+<!-- MODAL: CONECTAR BANCO / API -->
+<div class="modal-overlay" id="bankModal">
     <div class="modal">
         <div class="modal-header">
-            <h2 id="goalModalTitle">Nova Meta</h2>
-            <button class="close-modal" onclick="closeGoalModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="bankModalTitle">Conectar Instituição Bancária (API)</h2>
+            <button class="close-modal" onclick="closeBankModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <input type="hidden" id="goalId">
-        <div class="form-group">
-            <label>Título</label>
-            <input type="text" class="form-control" id="goalTitulo" placeholder="Ex: Viagem à Europa">
+        <input type="hidden" id="bankId">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Instituição Financeira</label>
+                <select class="form-control" id="bankInstitution">
+                    <option value="Nubank">Nubank</option>
+                    <option value="Itaú">Itaú Unibanco</option>
+                    <option value="Banco Inter">Banco Inter</option>
+                    <option value="XP Investimentos">XP Investimentos</option>
+                    <option value="BTG Pactual">BTG Pactual</option>
+                    <option value="Bradesco">Bradesco</option>
+                    <option value="Santander">Santander</option>
+                    <option value="Banco do Brasil">Banco do Brasil</option>
+                    <option value="C6 Bank">C6 Bank</option>
+                    <option value="Binance">Binance / Cripto</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tipo de Conta</label>
+                <select class="form-control" id="bankAccountType">
+                    <option value="Conta Corrente">Conta Corrente</option>
+                    <option value="Conta PJ">Conta PJ (Empresarial)</option>
+                    <option value="Corretora / Investimentos">Corretora / Investimentos</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Carteira Digital">Carteira Digital</option>
+                </select>
+            </div>
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Valor Alvo (R$)</label>
-                <input type="number" class="form-control" id="goalAlvo" placeholder="15000">
+                <label>Método de Conexão</label>
+                <select class="form-control" id="bankMethod">
+                    <option value="Open Finance (Pluggy OAuth2)">Open Finance (Pluggy OAuth2)</option>
+                    <option value="Open Finance (Belvo)">Open Finance (Belvo)</option>
+                    <option value="API Direta (Client Key / mTLS)">API Direta (Client Key / mTLS)</option>
+                    <option value="Importação OFX / CSV">Importação OFX / CSV</option>
+                </select>
             </div>
             <div class="form-group">
-                <label>Valor Atual (R$)</label>
-                <input type="number" class="form-control" id="goalAtual" placeholder="0">
+                <label>Agência / Conta (Mascarada)</label>
+                <input type="text" class="form-control mono" id="bankAgencyAccount" placeholder="Ag 0001 • CC 84920-1">
             </div>
-        </div>
-        <div class="form-group">
-            <label>Prazo</label>
-            <input type="date" class="form-control" id="goalPrazo">
-        </div>
-        <div class="form-group">
-            <label>Ícone</label>
-            <select class="form-control" id="goalIcone">
-                <option value="fa-plane">✈️ Viagem</option>
-                <option value="fa-shield-halved">🛡️ Emergência</option>
-                <option value="fa-car">🚗 Carro</option>
-                <option value="fa-graduation-cap">🎓 Educação</option>
-                <option value="fa-laptop">💻 Tecnologia</option>
-                <option value="fa-house">🏠 Casa</option>
-                <option value="fa-gem">💎 Investimento</option>
-                <option value="fa-heart">❤️ Saúde</option>
-            </select>
-        </div>
-        <div style="display: flex; gap: 12px; margin-top: 8px;">
-            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeGoalModal()">Cancelar</button>
-            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveGoal()"><i class="fa-solid fa-check"></i> Salvar</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL: ORÇAMENTO -->
-<div class="modal-overlay" id="budgetModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h2>Novo Orçamento</h2>
-            <button class="close-modal" onclick="closeBudgetModal()"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <input type="hidden" id="budgetId">
-        <div class="form-group">
-            <label>Categoria</label>
-            <select class="form-control" id="budgetCategoria">
-                <option value="Alimentação">Alimentação</option>
-                <option value="Moradia">Moradia</option>
-                <option value="Transporte">Transporte</option>
-                <option value="Lazer">Lazer</option>
-                <option value="Saúde">Saúde</option>
-                <option value="Educação">Educação</option>
-                <option value="Utilidades">Utilidades</option>
-                <option value="Cartão">Cartão</option>
-                <option value="Outros">Outros</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Limite Mensal (R$)</label>
-            <input type="number" class="form-control" id="budgetLimite" placeholder="1000">
-        </div>
-        <div style="display: flex; gap: 12px; margin-top: 8px;">
-            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeBudgetModal()">Cancelar</button>
-            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveBudget()"><i class="fa-solid fa-check"></i> Salvar</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL: INVESTIMENTO -->
-<div class="modal-overlay" id="investmentModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h2>Novo Investimento</h2>
-            <button class="close-modal" onclick="closeInvestmentModal()"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <input type="hidden" id="investmentId">
-        <div class="form-group">
-            <label>Nome do Ativo</label>
-            <input type="text" class="form-control" id="invNome" placeholder="Ex: Tesouro Selic 2029">
-        </div>
-        <div class="form-group">
-            <label>Classe</label>
-            <select class="form-control" id="invClasse">
-                <option value="Renda Fixa">Renda Fixa</option>
-                <option value="Ações">Ações</option>
-                <option value="Fundos Imobiliários">Fundos Imobiliários</option>
-                <option value="Internacional">Internacional</option>
-                <option value="Cripto">Cripto</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Valor Investido (R$)</label>
-            <input type="number" class="form-control" id="invValor" placeholder="10000">
-        </div>
-        <div style="display: flex; gap: 12px; margin-top: 8px;">
-            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeInvestmentModal()">Cancelar</button>
-            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveInvestment()"><i class="fa-solid fa-check"></i> Salvar</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL: DÍVIDA -->
-<div class="modal-overlay" id="debtModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h2>Nova Dívida</h2>
-            <button class="close-modal" onclick="closeDebtModal()"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <input type="hidden" id="debtId">
-        <div class="form-group">
-            <label>Nome da Dívida</label>
-            <input type="text" class="form-control" id="debtNome" placeholder="Ex: Financiamento Veículo">
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Valor Total (R$)</label>
-                <input type="number" class="form-control" id="debtTotal" placeholder="50000">
+                <label>Saldo Atual (R$)</label>
+                <input type="number" class="form-control" id="bankBalance" placeholder="10000" step="0.01">
             </div>
             <div class="form-group">
-                <label>Taxa de Juros (% a.m.)</label>
-                <input type="number" class="form-control" id="debtTaxa" placeholder="1.5" step="0.1">
+                <label>Item ID / API Token (Opcional)</label>
+                <input type="text" class="form-control mono" id="bankApiKey" placeholder="item_of_882a91...">
             </div>
         </div>
-        <div class="form-group">
-            <label>Pagamento Mensal (R$)</label>
-            <input type="number" class="form-control" id="debtMensal" placeholder="1000">
+        <div class="toggle-row" style="padding:8px 0;">
+            <div class="toggle-row-text"><strong>Sincronização Automática</strong><span>Atualizar saldo ao abrir o dashboard</span></div>
+            <label class="switch"><input type="checkbox" id="bankAutoSync" checked><span class="slider"></span></label>
         </div>
-        <div style="display: flex; gap: 12px; margin-top: 8px;">
-            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeDebtModal()">Cancelar</button>
-            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveDebt()"><i class="fa-solid fa-check"></i> Salvar</button>
+        <div class="toggle-row" id="bankImportInitialWrap" style="padding:8px 0;">
+            <div class="toggle-row-text"><strong>Puxar transações iniciais via API</strong><span>Sincronizar lançamentos recentes ao conectar</span></div>
+            <label class="switch"><input type="checkbox" id="bankImportInitialTxs" checked><span class="slider"></span></label>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 14px;">
+            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeBankModal()">Cancelar</button>
+            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveBankConnection()"><i class="fa-solid fa-link"></i> Conectar &amp; Salvar</button>
         </div>
     </div>
 </div>
@@ -727,49 +1031,84 @@
             <label class="checked" onclick="setTransactionType('receita')"><input type="radio" name="tType" value="receita" checked><span><i class="fa-solid fa-arrow-trend-up"></i> Receita</span></label>
             <label onclick="setTransactionType('despesa')"><input type="radio" name="tType" value="despesa"><span><i class="fa-solid fa-arrow-trend-down"></i> Despesa</span></label>
         </div>
-        <div class="form-group" style="margin-top: 16px;">
+        <div class="form-group" style="margin-top: 14px;">
             <label>Descrição</label>
-            <input type="text" class="form-control" id="tDescricao" placeholder="Ex: Salário, Supermercado...">
+            <input type="text" class="form-control" id="tDescricao" placeholder="Ex: Pró-labore, Dividendos FII, Supermercado...">
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label>Valor (R$)</label>
-                <input type="number" class="form-control" id="tValor" placeholder="0,00">
+                <input type="number" class="form-control" id="tValor" placeholder="0,00" step="0.01">
             </div>
             <div class="form-group">
                 <label>Data</label>
                 <input type="date" class="form-control" id="tData">
             </div>
         </div>
-        <div class="form-group">
-            <label>Categoria</label>
-            <select class="form-control" id="tCategoria">
-                <option value="Salário">Salário</option>
-                <option value="Freelance">Freelance</option>
-                <option value="Moradia">Moradia</option>
-                <option value="Alimentação">Alimentação</option>
-                <option value="Transporte">Transporte</option>
-                <option value="Lazer">Lazer</option>
-                <option value="Saúde">Saúde</option>
-                <option value="Educação">Educação</option>
-                <option value="Outros">Outros</option>
-            </select>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Categoria</label>
+                <select class="form-control" id="tCategoria">
+                    <option value="Salário">Salário</option>
+                    <option value="Pró-labore / PJ">Pró-labore / PJ</option>
+                    <option value="Freelance / Consultoria">Freelance / Consultoria</option>
+                    <option value="Dividendos / JCP">Dividendos / JCP</option>
+                    <option value="Aluguéis / FIIs">Aluguéis / FIIs</option>
+                    <option value="Rendimentos Renda Fixa">Rendimentos Renda Fixa</option>
+                    <option value="Moradia">Moradia</option>
+                    <option value="Alimentação">Alimentação</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Lazer">Lazer</option>
+                    <option value="Saúde">Saúde</option>
+                    <option value="Educação">Educação</option>
+                    <option value="Utilidades">Utilidades</option>
+                    <option value="Cartão">Cartão</option>
+                    <option value="Impostos">Impostos</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </div>
+            <div class="form-group" id="tClassificacaoWrap">
+                <label>Classificação de Renda</label>
+                <select class="form-control" id="tClassificacao">
+                    <option value="Ativa">Renda Ativa (Trabalho / PJ)</option>
+                    <option value="Passiva">Renda Passiva (Ativos / Dividendos)</option>
+                </select>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Recorrência</label>
-            <select class="form-control" id="tRecorrencia">
-                <option value="Única">Única</option>
-                <option value="Mensal">Mensal</option>
-                <option value="Semanal">Semanal</option>
-                <option value="Anual">Anual</option>
-            </select>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Conta Bancária Vinculada</label>
+                <select class="form-control" id="tConta"></select>
+            </div>
+            <div class="form-group">
+                <label>Método de Pagamento</label>
+                <select class="form-control" id="tMetodo">
+                    <option value="PIX">PIX</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Débito">Débito</option>
+                    <option value="TED / DOC">TED / DOC</option>
+                    <option value="Boleto">Boleto</option>
+                    <option value="Crédito em Conta">Crédito em Conta</option>
+                </select>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Status</label>
-            <select class="form-control" id="tStatus">
-                <option value="Pendente">Pendente</option>
-                <option value="Confirmado">Confirmado</option>
-            </select>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Recorrência</label>
+                <select class="form-control" id="tRecorrencia">
+                    <option value="Única">Única</option>
+                    <option value="Mensal">Mensal</option>
+                    <option value="Semanal">Semanal</option>
+                    <option value="Anual">Anual</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select class="form-control" id="tStatus">
+                    <option value="Confirmado">Confirmado</option>
+                    <option value="Pendente">Pendente</option>
+                </select>
+            </div>
         </div>
         <div style="display: flex; gap: 12px; margin-top: 8px;">
             <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeTransactionModal()">Cancelar</button>
@@ -778,29 +1117,161 @@
     </div>
 </div>
 
-<!-- NOTIFICATION POPUP -->
-<div class="notif-popup" id="notifPopup">
-    <div class="notif-header">
-        <h3>Notificações</h3>
-        <span id="notifCount">0</span>
+<!-- MODAL: META -->
+<div class="modal-overlay" id="goalModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="goalModalTitle">Nova Meta</h2>
+            <button class="close-modal" onclick="closeGoalModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="hidden" id="goalId">
+        <div class="form-group"><label>Título</label><input type="text" class="form-control" id="goalTitulo" placeholder="Ex: Reserva de Emergência 12 meses"></div>
+        <div class="form-row">
+            <div class="form-group"><label>Valor Alvo (R$)</label><input type="number" class="form-control" id="goalAlvo" placeholder="50000"></div>
+            <div class="form-group"><label>Valor Atual (R$)</label><input type="number" class="form-control" id="goalAtual" placeholder="0"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Prazo</label><input type="date" class="form-control" id="goalPrazo"></div>
+            <div class="form-group">
+                <label>Ícone</label>
+                <select class="form-control" id="goalIcone">
+                    <option value="fa-shield-halved">Reserva / Segurança</option>
+                    <option value="fa-plane">Viagem</option>
+                    <option value="fa-car">Veículo</option>
+                    <option value="fa-graduation-cap">Educação</option>
+                    <option value="fa-laptop">Equipamento / Trabalho</option>
+                    <option value="fa-house">Imóvel</option>
+                    <option value="fa-gem">Liberdade Financeira</option>
+                </select>
+            </div>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeGoalModal()">Cancelar</button>
+            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveGoal()"><i class="fa-solid fa-check"></i> Salvar</button>
+        </div>
     </div>
-    <div class="notif-list" id="notifList">
-        <div class="notif-empty">Nenhuma notificação</div>
+</div>
+
+<!-- MODAL: APORTAR NA META -->
+<div class="modal-overlay" id="goalDepositModal">
+    <div class="modal" style="max-width:400px;">
+        <div class="modal-header">
+            <h2 id="goalDepositTitle">Aportar na Meta</h2>
+            <button class="close-modal" onclick="closeGoalDepositModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="hidden" id="goalDepositId">
+        <div class="form-group">
+            <label>Valor do Aporte (R$)</label>
+            <input type="number" class="form-control" id="goalDepositAmount" placeholder="1000" step="0.01">
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeGoalDepositModal()">Cancelar</button>
+            <button class="btn btn-success" style="flex: 1; justify-content: center;" onclick="confirmGoalDeposit()"><i class="fa-solid fa-plus"></i> Confirmar Aporte</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: ORÇAMENTO -->
+<div class="modal-overlay" id="budgetModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="budgetModalTitle">Novo Orçamento</h2>
+            <button class="close-modal" onclick="closeBudgetModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="hidden" id="budgetId">
+        <div class="form-group">
+            <label>Categoria</label>
+            <select class="form-control" id="budgetCategoria">
+                <option value="Alimentação">Alimentação</option>
+                <option value="Moradia">Moradia</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Lazer">Lazer</option>
+                <option value="Saúde">Saúde</option>
+                <option value="Educação">Educação</option>
+                <option value="Utilidades">Utilidades</option>
+                <option value="Cartão">Cartão</option>
+                <option value="Impostos">Impostos</option>
+                <option value="Outros">Outros</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Limite Mensal (R$)</label><input type="number" class="form-control" id="budgetLimite" placeholder="1500"></div>
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeBudgetModal()">Cancelar</button>
+            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveBudget()"><i class="fa-solid fa-check"></i> Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: INVESTIMENTO -->
+<div class="modal-overlay" id="investmentModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="investmentModalTitle">Novo Investimento</h2>
+            <button class="close-modal" onclick="closeInvestmentModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="hidden" id="investmentId">
+        <div class="form-group"><label>Nome do Ativo / Ticker</label><input type="text" class="form-control" id="invNome" placeholder="Ex: MXRF11, Tesouro Selic 2029, IVVB11"></div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Classe</label>
+                <select class="form-control" id="invClasse">
+                    <option value="Renda Fixa">Renda Fixa</option>
+                    <option value="Fundos Imobiliários">Fundos Imobiliários</option>
+                    <option value="Ações">Ações</option>
+                    <option value="Internacional">Internacional</option>
+                    <option value="Cripto">Cripto</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Corretora / Banco</label>
+                <input type="text" class="form-control" id="invCorretora" placeholder="Ex: XP Investimentos, BTG, Nubank">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Valor Investido (R$)</label><input type="number" class="form-control" id="invValor" placeholder="25000" step="0.01"></div>
+            <div class="form-group"><label>Rentabilidade Anual (% a.a.)</label><input type="number" class="form-control" id="invRentabilidade" placeholder="12.5" step="0.1"></div>
+        </div>
+        <div class="form-group"><label>Dividendos / Rendimento Mensal Estimado (R$)</label><input type="number" class="form-control" id="invDividendos" placeholder="240" step="0.01"></div>
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeInvestmentModal()">Cancelar</button>
+            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveInvestment()"><i class="fa-solid fa-check"></i> Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: DÍVIDA -->
+<div class="modal-overlay" id="debtModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="debtModalTitle">Nova Dívida</h2>
+            <button class="close-modal" onclick="closeDebtModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="hidden" id="debtId">
+        <div class="form-group"><label>Nome da Dívida</label><input type="text" class="form-control" id="debtNome" placeholder="Ex: Financiamento Imóvel / Veículo"></div>
+        <div class="form-row">
+            <div class="form-group"><label>Saldo Devedor Atual (R$)</label><input type="number" class="form-control" id="debtTotal" placeholder="45000"></div>
+            <div class="form-group"><label>Valor Original Contratado (R$)</label><input type="number" class="form-control" id="debtOriginal" placeholder="60000"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group"><label>Taxa de Juros (% a.m.)</label><input type="number" class="form-control" id="debtTaxa" placeholder="1.2" step="0.05"></div>
+            <div class="form-group"><label>Parcela Mensal (R$)</label><input type="number" class="form-control" id="debtMensal" placeholder="1450"></div>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <button class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeDebtModal()">Cancelar</button>
+            <button class="btn btn-primary" style="flex: 1; justify-content: center;" onclick="saveDebt()"><i class="fa-solid fa-check"></i> Salvar</button>
+        </div>
     </div>
 </div>
 
 <!-- MODAL: NOVO PERFIL -->
 <div class="modal-overlay" id="profileModal">
-    <div class="modal" style="width:400px;">
+    <div class="modal" style="max-width:400px;">
         <div class="modal-header">
             <h2 id="profileModalTitle">Novo Perfil</h2>
             <button class="close-modal" onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <input type="hidden" id="profileId">
-        <div class="form-group">
-            <label>Nome do Perfil</label>
-            <input type="text" class="form-control" id="profileNome" placeholder="Ex: Pessoal, PJ, Investidor...">
-        </div>
+        <div class="form-group"><label>Nome do Perfil</label><input type="text" class="form-control" id="profileNome" placeholder="Ex: Pessoal, Empresa PJ, Carteira Dividendos"></div>
         <div class="form-group">
             <label>Tipo</label>
             <select class="form-control" id="profileTipo">
@@ -817,73 +1288,75 @@
     </div>
 </div>
 
-<!-- MODAL: CONFIRMAR EXCLUSÃO PERFIL -->
+<!-- MODAL: CONFIRMAÇÃO -->
 <div class="modal-overlay" id="confirmModal">
-    <div class="modal" style="width:360px;">
+    <div class="modal" style="max-width:380px;">
         <div class="modal-header">
-            <h2>Confirmar</h2>
+            <h2>Confirmar Ação</h2>
             <button class="close-modal" onclick="closeConfirmModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <p style="color:var(--text-sec); font-size:14px; line-height:1.6; margin-bottom:20px;" id="confirmMsg">Tem certeza?</p>
         <div style="display:flex; gap:12px;">
             <button class="btn btn-outline" style="flex:1; justify-content:center;" onclick="closeConfirmModal()">Cancelar</button>
-            <button class="btn btn-primary" style="flex:1; justify-content:center; background:var(--error);" id="confirmBtn" onclick="closeConfirmModal()">Confirmar</button>
+            <button class="btn btn-primary" style="flex:1; justify-content:center; background:var(--error);" id="confirmBtn">Confirmar</button>
         </div>
+    </div>
+</div>
+
+<!-- NOTIFICATION POPUP -->
+<div class="notif-popup" id="notifPopup">
+    <div class="notif-header">
+        <h3>Central de Alertas</h3>
+        <span id="notifCount">0</span>
+    </div>
+    <div class="notif-list" id="notifList">
+        <div class="notif-empty">Nenhuma notificação</div>
     </div>
 </div>
 
 <!-- AUTH OVERLAY -->
 <div class="modal-overlay" id="authOverlay" style="display: flex; z-index: 2000;">
-    <div class="modal" style="width: 400px;">
-        <div style="text-align: center; margin-bottom: 24px;">
-            <div style="font-size: 40px; color: var(--accent); margin-bottom: 8px;"><i class="fa-solid fa-infinity"></i></div>
-            <h1 style="margin-bottom: 4px;">Nexus</h1>
-            <p class="subtitle" style="margin-top: 0;">Gestão Financeira Premium</p>
+    <div class="modal" style="max-width: 430px;">
+        <div style="text-align: center; margin-bottom: 22px;">
+            <div class="logo-mark" style="width:52px; height:52px; font-size:24px; margin:0 auto 12px;"><i class="fa-solid fa-infinity"></i></div>
+            <h1 style="margin-bottom: 4px; font-size:22px;">Nexus Wealth</h1>
+            <p class="subtitle">Plataforma Profissional de Renda &amp; Open Finance</p>
         </div>
 
-        <!-- Login Form -->
+        <button class="btn demo-btn" onclick="enterDemoMode()">
+            <i class="fa-solid fa-rocket"></i> Acessar Modo Demonstração (Dados Completos)
+        </button>
+
+        <div class="auth-divider">ou entre com sua conta na nuvem</div>
+
         <div id="loginForm">
-            <div class="form-group">
-                <label>E-mail</label>
-                <input type="email" class="form-control" id="loginEmail" placeholder="seu@email.com">
-            </div>
-            <div class="form-group">
-                <label>Senha</label>
-                <input type="password" class="form-control" id="loginPassword" placeholder="••••••••">
-            </div>
+            <div class="form-group"><label>E-mail</label><input type="email" class="form-control" id="loginEmail" placeholder="seu@email.com"></div>
+            <div class="form-group"><label>Senha</label><input type="password" class="form-control" id="loginPassword" placeholder="••••••••"></div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
                 <input type="checkbox" id="rememberMe" checked style="accent-color: var(--accent); width: 16px; height: 16px;">
-                <label for="rememberMe" style="font-size: 13px; color: var(--text-sec); cursor: pointer;">Lembrar-me</label>
+                <label for="rememberMe" style="font-size: 13px; color: var(--text-sec); cursor: pointer;">Lembrar sessão</label>
             </div>
-            <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="handleLogin()"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
-            <p style="text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-sec);">
-                Não tem conta? <a href="#" style="color: var(--accent); text-decoration: none;" onclick="showRegister()">Cadastre-se</a>
+            <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="handleLogin()"><i class="fa-solid fa-right-to-bracket"></i> Entrar com Firebase</button>
+            <p style="text-align: center; margin-top: 14px; font-size: 13px; color: var(--text-sec);">
+                Não tem conta? <a href="#" style="color: var(--accent); text-decoration: none; font-weight:600;" onclick="showRegister(); return false;">Cadastre-se</a>
             </p>
         </div>
 
-        <!-- Register Form -->
         <div id="registerForm" style="display: none;">
-            <div class="form-group">
-                <label>Nome</label>
-                <input type="text" class="form-control" id="regName" placeholder="Seu nome">
-            </div>
-            <div class="form-group">
-                <label>E-mail</label>
-                <input type="email" class="form-control" id="regEmail" placeholder="seu@email.com">
-            </div>
-            <div class="form-group">
-                <label>Senha</label>
-                <input type="password" class="form-control" id="regPassword" placeholder="••••••••">
-            </div>
+            <div class="form-group"><label>Nome completo</label><input type="text" class="form-control" id="regName" placeholder="Seu nome"></div>
+            <div class="form-group"><label>E-mail</label><input type="email" class="form-control" id="regEmail" placeholder="seu@email.com"></div>
+            <div class="form-group"><label>Senha</label><input type="password" class="form-control" id="regPassword" placeholder="••••••••"></div>
             <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="handleRegister()"><i class="fa-solid fa-user-plus"></i> Criar Conta</button>
-            <p style="text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-sec);">
-                Já tem conta? <a href="#" style="color: var(--accent); text-decoration: none;" onclick="showLogin()">Fazer login</a>
+            <p style="text-align: center; margin-top: 14px; font-size: 13px; color: var(--text-sec);">
+                Já tem conta? <a href="#" style="color: var(--accent); text-decoration: none; font-weight:600;" onclick="showLogin(); return false;">Fazer login</a>
             </p>
         </div>
     </div>
 </div>
 
-<script src="js/app.js"></script>
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
 
+<script src="js/app.js"></script>
 </body>
 </html>
